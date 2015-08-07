@@ -1,0 +1,14 @@
+
+{% for news in list_news %}
+		<div class="panel panel-primary">
+		  <div class="panel-heading">
+		  {%  if news.content.type == "article" %}
+			   <h3 class="panel-title">Article : <a href="{{ path('lcv_platform_view', {'id': news.content.dest}) }}">{{news.content.title}}</a>  - Ecrit le {{news.content.date|localizeddate('full', 'none')}} par {{news.content.author}}</h3>
+		  {%  endif %}
+
+		  </div>
+		  <div class="panel-body">
+		    {{news.content.abstract | raw}}
+		  </div>
+		</div>
+  {% endfor %}

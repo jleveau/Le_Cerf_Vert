@@ -1,0 +1,42 @@
+
+{% extends "::layout.html.twig" %}
+
+{% block title %}
+  Accueil - {{ parent() }}
+{% endblock %}
+
+
+	
+{% block body %}
+	<div class="row">
+		<div class="col-md-2">
+	    	<img  src="{{ asset('logo.png') }}" class="img-circle" />
+	  	   
+	    </div>
+		<div class="container col-md-7">
+			
+		  
+			<div id="header" class="jumbotron">
+			    
+			<h1>Accueil</h1>
+				<div>
+				    {% for message in app.session.flashbag.get('info') %}
+					   <p>{{ message }}</p>
+				    {% endfor %}
+				    </div>
+					  
+		   	     {% block lcvcore_body %}
+		     {% endblock %}
+				  	  
+		     </div>
+		     <div class="page-header">
+			  <h1>News :</h1>
+			</div>
+		      {{ render(controller("LCVCoreBundle:Accueil:news", {'limit': 10})) }}
+	    </div>
+	    <div class="col-md-3">
+	    </div>
+	  
+   </div>
+ <!--  End Block Body -->
+{% endblock %}

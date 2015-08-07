@@ -1,0 +1,12 @@
+services:
+    sonata.admin.article:
+        class: LCV\CoreBundle\Admin\NewsAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "News", label: "News" }
+        arguments:
+            - ~
+            - LCV\CoreBundle\Entity\News
+            - ~
+        calls:
+            - [ setTranslationDomain, [LCVCoreBundle]]
+            

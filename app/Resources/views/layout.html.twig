@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>{% block title %}Le Cerf Vert{% endblock %}</title>
+   {% block javascripts %}
+	    <!-- Bootstrap -->
+	    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
+	
+	    <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
+	    {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
+   		
+	    <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
+	    <script src="{{ asset('js/jquery.js') }}"></script>
+	    <!-- Include all JavaScripts, compiled by Assetic -->
+	    <script src="{{ asset('js/bootstrap.js') }}"></script>
+	    
+	    <!-- Barre de navigation  -->
+	    <script> type="text/javascript">
+	    $( document ).ready(function() {
+			$('.nav li').click(function(){
+			    $('.nav li').removeClass('active');
+			    $(this).addClass('active');
+			})
+			
+	    });    
+	    </script>
+			
+		{% javascripts 
+					   '@LCVPlatformBundle/Resources/public/js/stupidtable.min.js'%}
+					   <script type="text/javascript" src="{{ asset_url }}"></script>
+		{% endjavascripts %}
+  {% endblock %}
+</head>
+
+<body>
+	<nav class="navbar navbar-inverse">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <a class="navbar-brand" href="{{ path('_accueil') }}">Le-Cerf-Vert</a>
+	    </div>
+	   <div><ul class="nav navbar-nav">
+        <li class="active"><a href="{{ path('_accueil') }}">Accueil</a></li>
+        <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Articles <span class="caret"></span></a>
+	        <ul class="dropdown-menu">
+	            <li><a href="{{ path('lcv_platform_add') }}">Ecrire un article</a></li>
+	            <li><a href="{{ path('lcv_platform_index') }}">Categories</a></li>
+	            <li><a href="{{ path('lcv_platform_list_articles') }}">Tous les Articles</a></li>
+	        </ul>
+        </li>
+       {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        	<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#"> {{app.user.username}}<span class="caret"></span></a>
+        {% else %}
+        	<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Mon Compte <span class="caret"></span></a>
+        {% endif %}
+           	<ul class="dropdown-menu">
+        		{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+	            <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
+	            {% else %}
+	            <li><a href="{{ path('fos_user_security_login') }}">Connection</a></li>
+	            <li><a href="{{ path('fos_user_registration_register') }}">Inscription</a></li>
+	            {% endif %}
+	        </ul>
+        </li>
+	    <div>
+
+			
+        
+
+       </div></ul>  
+	  </div>
+	</nav>
+	    
+{% block body %}
+{% endblock %} <!--  End Block Body -->
+    <hr>
+
+    <footer>
+     
+    </footer>
+  </div>
+</body>
+</html>

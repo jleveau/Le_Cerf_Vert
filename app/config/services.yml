@@ -1,0 +1,17 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+
+services:
+    twig.extension.intl:
+       class: Twig_Extensions_Extension_Intl
+       tags:
+           - { name: twig.extension }
+    oc_platform.doctrine.newscreation:
+        class: LCV\CoreBundle\DoctrineListener\NewsCreator
+        arguments: []
+        tags:
+            - { name: doctrine.event_listener, event: postPersist}
+  
+            
+parameters:
+#    parameter_name: value

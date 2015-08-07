@@ -1,0 +1,20 @@
+{
+  "name": "Le_Cerf_Vert",
+  "version": "0.0.0",
+  "authors": [
+    "Julien Leveau <oursgroumy@gmail.com>"
+  ],
+  "description": "Le_Cerf_Vert Website",
+  "keywords": [
+    "LCV"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "web/assets/vendor/",
+    "test",
+    "tests"
+  ]
+}
