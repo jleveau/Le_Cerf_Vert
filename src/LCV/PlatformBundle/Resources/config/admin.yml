@@ -1,0 +1,22 @@
+services:
+    sonata.admin.article:
+        class: LCV\PlatformBundle\Admin\ArticleAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Article", label: "Article" }
+        arguments:
+            - ~
+            - LCV\PlatformBundle\Entity\Article
+            - ~
+        calls:
+            - [ setTranslationDomain, [LCVPlatformBundle]]
+            
+    sonata.admin.category:
+        class: LCV\PlatformBundle\Admin\CategoryAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Article", label: "Category" }
+        arguments:
+            - ~
+            - LCV\PlatformBundle\Entity\Category
+            - ~
+        calls:
+            - [ setTranslationDomain, [LCVPlatformBundle]]

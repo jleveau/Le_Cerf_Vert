@@ -1,0 +1,16 @@
+{# src/LCV/PlatformBundle/Resources/views/Article/add.html.twig #}
+
+{% extends "LCVPlatformBundle::layout.html.twig" %}
+
+{% block lcvplatform_body %}
+
+  <h2>Ajouter un article</h2>
+
+  {{ include("LCVPlatformBundle:Article:form.html.twig") }}
+
+  <p>
+    Attention : cet article sera ajouté directement
+    sur la page d'accueil après validation du formulaire.
+  </p>
+
+{% endblock %}

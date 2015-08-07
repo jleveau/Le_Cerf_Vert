@@ -1,0 +1,48 @@
+ {% extends "LCVPlatformBundle::layout.html.twig" %}
+ {% block lcvplatform_body %}
+	{{ parent() }}
+	 <h2>Liste des articles</h2>
+	
+	  <table class="table">
+	    <thead>
+	      <tr>
+	        <th data-sort="string">Titre</th>
+	        <th data-sort="string">Auteur</th>
+	        <th data-sort="string">Categorie</th>
+	        <th data-sort="string"> Dernière modification</th>
+	        <th data-sort="string"> Date écriture</th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	    {% for article in listArticles %}
+		    
+	      <tr>
+	        <td> <a href="{{ path('lcv_platform_view', {'id': article.id}) }}">{{ article.title }} </a> </td>
+	        <td> {{ article.author.username }} </td>
+	        <td> {{ article.category.name }} </td>
+	        <td> {{ article.updatedAt.format('d/m/Y') }} </td>
+	        <td> {{ article.date.format('d/m/Y') }} </td>
+	      </tr>
+	    {% endfor %}
+	
+	    </tbody>
+	  </table>
+	
+		<style type="text/css">
+	   
+	    th[data-sort]{
+	      cursor:pointer;
+	    }
+	    tr.awesome{
+	      color: red;
+	    }
+	  </style>
+	    <script>
+	    $(function(){
+	        $("table").stupidtable();
+	    });
+	  </script>
+	  <!-- enblock lcv_platform_list_articles -->
+{% endblock %} 
+ 
+ 

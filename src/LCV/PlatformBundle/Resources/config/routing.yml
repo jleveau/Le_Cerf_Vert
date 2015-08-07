@@ -1,0 +1,36 @@
+lcv_platform_index:
+    path:      /index/
+    defaults:  { _controller: LCVPlatformBundle:Article:index}
+
+
+lcv_platform_view:
+    path:      /article/{id}
+    defaults:  { _controller: LCVPlatformBundle:Article:view }
+    requirements:
+        id: \d+
+
+lcv_platform_add:
+    path:      /add/{category_id}
+    defaults:  { _controller: LCVPlatformBundle:Article:add, category_id: 0 }
+    requirements:
+        category_id: \d*
+
+lcv_platform_edit:
+    path:      /edit/{id}
+    defaults:  { _controller: LCVPlatformBundle:Article:edit }
+    requirements:
+        id: \d+
+
+lcv_platform_delete:
+    path:      /delete/{id}
+    defaults:  { _controller: LCVPlatformBundle:Article:delete }
+    requirements:
+        id: \d+
+        
+lcv_platform_accueil:
+    path:      /
+    defaults:  { _controller: LCVPlatformBundle:Article:accueil }
+   
+lcv_platform_list_articles:
+    path:      /list_articles
+    defaults:  { _controller: LCVPlatformBundle:Article:list }

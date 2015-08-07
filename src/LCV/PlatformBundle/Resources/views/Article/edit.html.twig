@@ -1,0 +1,20 @@
+{% extends "LCVPlatformBundle::layout.html.twig" %}
+
+{% block title %}
+  Modifier un article - {{ parent() }}
+{% endblock %}
+
+{% block lcvplatform_body %}
+
+  <h2>Modifier un article</h2>
+
+  {{ include("LCVPlatformBundle:Article:form.html.twig") }}
+
+  <p>
+    <a href="{{ path('lcv_platform_view', {'id': article.id}) }}" class="btn btn-default">
+      <i class="glyphicon glyphicon-chevron-left"></i>
+      Retour à l'article
+    </a>
+  </p>
+
+{% endblock %}

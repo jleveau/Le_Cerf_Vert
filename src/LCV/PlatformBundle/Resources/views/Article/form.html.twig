@@ -1,0 +1,66 @@
+
+<h3>{%  if article.title is not null %} 
+			{{article.title}}
+	{% else %}
+			Nouvel Article 
+	{% endif %}
+	- {{form.vars.value.category.name}} 
+	</h3>
+			
+{% form_theme form _self %}
+
+			
+<div class="well row">
+    {# Les erreurs générales du formulaire. #}
+       {{ form_start(form) }}
+    
+ 	   {{ form_errors(form) }}
+
+	
+
+      <div class="form-group col-xs-2>
+	      {# Génération du label. #}
+	      {{ form_label(form.title, "Titre de l'article", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	      {{ form_errors(form.title) }}
+	        {# Génération de l'input. #}
+	      {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
+      </div>
+
+	  <div class="form-group col-xs-2>
+	      {# Idem pour un autre champ. #}
+	      {{ form_label(form.content, "Contenu  l'article", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	      {{ form_errors(form.content) }}
+	      {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
+      </div>
+    
+      <div class="form-group col-xs-2>
+	      {{ form_label(form.category, "Categorie", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	      {{ form_errors(form.category) }}
+	      {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
+      </div>
+	   
+	   
+	  {# Génération du label + error + widget pour un champ #}
+	  
+	  {% if form.published is defined %}
+	  <div class="form-group col-xs-2>
+		   {{ form_label(form.published) }}
+	       {{ form_errors(form.published) }}
+	       {{ form_widget(form.published) }}
+	  </div>
+	  {% endif %}
+		
+  {# Pour le bouton, pas de label ni d'erreur, on affiche juste le widget #}
+  		
+	   {{ form_widget(form.save,{ 'label': 'Enregister l\'article' } , { 'attr': {'class': 'calendar col-xs-4' } }) }}
+   		
+    
+    {# Génération automatique des champs pas encore écrits.
+     Dans cet exemple, ce serait le champ CSRF (géré automatiquement par Symfony !)
+     et tous les champs cachés (type « hidden »). #}
+   {{ form_rest(form) }}
+  {# Fermeture de la balise <form> du formulaire HTML #}
+  
+  {{ form_end(form) }}
+  
+</div>
