@@ -13,6 +13,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="LCV\CoreBundle\Entity\ContentRepository")
+ * @ORM\HasLifeCycleCallbacks()
+ * 
  */
 class Content
 {
@@ -25,43 +27,38 @@ class Content
      */
     private $id;
     
-	/**
-	* @var integer
-    * @ORM\Column(name="dest", type="integer")
-    */
-    private $dest;
-    
-    /**
-     * @var string
-     * @ORM\Column(name="title", type="string", length=255)
-     */
-    private $title;
-    
     /**
      * @var string
      * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
-
-    /**
-     * @var Application\Sonata\UserBundle\Entity\User
-     *
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User")
-     */
-    private $author;
-    
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="date", type="datetime")
-     */
-    private $date;
     
     /**
      * @var string
      * @ORM\Column(name="abstract", type="string", length=255)
      */
 	private $abstract;
+        
+    
+    ////////////
+     /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate() {
+        $this -> setUpdatedAt(new \DateTime());
+    }
+    
+    public function createAbstract($s){
+        $abstract = substr($s,0,-255);
+        if (!$abstract){
+            $this->setAbstract($s);
+        }
+        else{
+            $this->setAbstract($abstract . "...");
+        }
+    }
+    
+    ///////////
     
     /**
      * Get id
@@ -71,29 +68,6 @@ class Content
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set dest_id
-     *
-     * @param integer $dest
-     * @return Content
-     */
-    public function setDest($dest)
-    {
-        $this->dest = $dest;
-
-        return $this;
-    }
-
-    /**
-     * Get dest
-     *
-     * @return integer 
-     */
-    public function getDest()
-    {
-        return $this->dest;
     }
 
     /**

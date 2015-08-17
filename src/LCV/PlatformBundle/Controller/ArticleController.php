@@ -14,12 +14,12 @@ use LCV\PlatformBundle\Entity\ArticleSkill;
 use LCV\PlatformBundle\Form\ArticleType;
 use LCV\PlatformBundle\Form\ArticleEditType;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-
+use LCV\CoreBundle\Entity\Content;
+use Doctrine\ORM\Id\AssignedGenerator;
 
 class ArticleController extends Controller {
 
     public function indexAction() {
-
         
         $listCategories = $this -> getDoctrine() -> getManager() -> getRepository('LCVPlatformBundle:Category') -> getArticles();
         //$listArticles = $this -> getDoctrine() -> getManager() -> getRepository('LCVPlatformBundle:Article') -> getArticles();
@@ -58,6 +58,7 @@ class ArticleController extends Controller {
     public function addAction($category_id,Request $request) {
 
         $article = new Article();
+        
         $em = $this -> getDoctrine() -> getManager();
  		if ($category_id == null)
  			$category=$em->getRepository('LCVPlatformBundle:Category') -> findOneByName('Default');
@@ -70,11 +71,22 @@ class ArticleController extends Controller {
         if ($form -> handleRequest($request) -> isValid()) {
             
             //On relie l'article et l'utilisateur connecté
-            $user = $this->getUser();
-            $article->setAuthor($user);
+            $article->setAuthor($this->getUser());
+            
+            // Configuration du contenu associé à l'article
+            $content = new Content();
+            $content->setType("article");
+            $content->createAbstract($article->getContent());
+            $em -> persist($content);
+            $em -> flush(); //On flush pour créer l'id du content
+            
             
             // On l'enregistre notre objet $article dans la base de données, par exemple
 
+            $article->setId($content->getId());
+            $metadata = $em->getClassMetaData(get_class($article));
+            $metadata->setIdGenerator(new AssignedGenerator());
+            $metadata->setIdGeneratorType(\Doctrine\ORM\Mapping\ClassMetadata::GENERATOR_TYPE_NONE);
             $em -> persist($article);
             $em -> flush();
 

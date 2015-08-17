@@ -16,30 +16,13 @@ class NewsCreator
     $entity = $args->getEntity();
     
     // On veut envoyer un email que pour les entités Application
-    if ($entity instanceof Article) {
+    if ($entity instanceof Content) {
     	$em =$args->getEntityManager();
-    	$article = $entity;
+    	$content = $entity;
     	
 		$news= new News();
-		$content = new Content();
-		$content->setDest($article->getId());
-		$content->setType("article");
-		$content->setDate($article->getDate());
-		$content->setAuthor($article->getAuthor());
-		$content->setTitle($article->getTitle());
-		
-		$article_content=$article->getContent();
-		$abstract = substr($article_content,0,-255);
-		if (!$abstract){
-			$content->setAbstract($article->getContent());
-		}
-		else{
-			$content->setAbstract($abstract . "...");
-		}
-		
 		$news->setContent($content);
 		
-		$em -> persist($content);
         $em -> persist($news);
         $em -> flush();
  	  }

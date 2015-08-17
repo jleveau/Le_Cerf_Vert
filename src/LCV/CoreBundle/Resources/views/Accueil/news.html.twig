@@ -2,8 +2,9 @@
 {% for news in list_news %}
 		<div class="panel panel-primary">
 		  <div class="panel-heading">
+		  	  {{ render(controller("LCVCoreBundle:Accueil:news_header", {'content_id': news.content.id,'type': news.content.type })) }}
+		  
 		  {%  if news.content.type == "article" %}
-			   <h3 class="panel-title">Article : <a href="{{ path('lcv_platform_view', {'id': news.content.dest}) }}">{{news.content.title}}</a>  - Ecrit le {{news.content.date|localizeddate('full', 'none')}} par {{news.content.author}}</h3>
 		  {%  endif %}
 
 		  </div>

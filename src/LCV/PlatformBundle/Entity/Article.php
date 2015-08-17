@@ -19,10 +19,6 @@ use LCV\PlatformBundle\Validator\Antiflood;
  * @UniqueEntity("title")
  */
 class Article {
-    /**
-     * @ORM\ManyToOne(targetEntity="LCV\PlatformBundle\Entity\Category", inversedBy="articles")
-     */
-    private $category;
 
     /**
      * @var integer
@@ -32,12 +28,17 @@ class Article {
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
-    
-     /**
+
+    /**
      * @var string
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+
+    /**
+     * @var Application\Sonata\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="articles")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User")
      */
     private $author;
 
@@ -45,21 +46,13 @@ class Article {
      * @var \DateTime
      *
      * @ORM\Column(name="date", type="datetime")
-     * @Assert\DateTime()
      */
     private $date;
 
     /**
-     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     * @ORM\ManyToOne(targetEntity="LCV\PlatformBundle\Entity\Category", inversedBy="articles")
      */
-    private $updatedAt;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, unique=true)
-     */
-    private $title;
+    private $category;
 
     /**
      * @var string
@@ -70,11 +63,10 @@ class Article {
      */
     private $content;
 
-
     /**
-     * @ORM\Column(name="nb_comments", type="integer")
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
-    private $nbComments = 0;
+    private $updatedAt;
 
     /**
      * @Gedmo\Slug(fields={"title"})
@@ -82,7 +74,7 @@ class Article {
      */
     private $slug;
 
-    /////////////////////
+    ////////////
     /**
      * @ORM\PreUpdate
      */
@@ -90,16 +82,7 @@ class Article {
         $this -> setUpdatedAt(new \DateTime());
     }
 
-    public function increaseComment() {
-        $this -> nbComments++;
-    }
-
-    public function decreaseComment() {
-        $this -> nbComments--;
-    }
-    
-
-    /////////////////////
+    ///////////
 
     public function __construct() {
         $this -> date = new \DateTime();
@@ -115,48 +98,15 @@ class Article {
     }
 
     /**
-     * Set date
+     * Set id
      *
-     * @param \DateTime $date
+     * @param integer
      * @return Article
      */
-    public function setDate($date) {
-        $this -> date = $date;
-
+    public function setId($id) {
+        $this -> id = $id;
         return $this;
     }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime
-     */
-    public function getDate() {
-        return $this -> date;
-    }
-
-    /**
-     * Set title
-     *
-     * @param string $title
-     * @return Article
-     */
-    public function setTitle($title) {
-        $this -> title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle() {
-        return $this -> title;
-    }
-
-
 
     /**
      * Set content
@@ -177,49 +127,6 @@ class Article {
      */
     public function getContent() {
         return $this -> content;
-    }
-
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     * @return Article
-     */
-    public function setUpdatedAt($updatedAt) {
-        $this -> updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt() {
-        return $this -> updatedAt;
-    }
-
-    /**
-     * Set nbComments
-     *
-     * @param integer $nbComments
-     * @return Article
-     */
-    public function setNbComments($nbComments) {
-        $this -> nbComments = $nbComments;
-
-        return $this;
-    }
-
-    /**
-     * Get nbComments
-     *
-     * @return integer
-     */
-    public function getNbComments() {
-        return $this -> nbComments;
     }
 
     /**
@@ -243,19 +150,14 @@ class Article {
         return $this -> slug;
     }
 
-
-
-
-
     /**
      * Set category
      *
      * @param \LCV\PlatformBundle\Entity\Article $category
      * @return Article
      */
-    public function setCategory(\LCV\PlatformBundle\Entity\Category $category = null)
-    {
-        $this->category = $category;
+    public function setCategory(\LCV\PlatformBundle\Entity\Category $category = null) {
+        $this -> category = $category;
 
         return $this;
     }
@@ -265,9 +167,82 @@ class Article {
      *
      * @return \LCV\PlatformBundle\Entity\Category
      */
-    public function getCategory()
+    public function getCategory() {
+        return $this -> category;
+    }
+
+    public function __toString() {
+        return $this -> title;
+    }
+
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Article
+     */
+    public function setTitle($title)
     {
-        return $this->category;
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Article
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime 
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return Article
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**
@@ -276,7 +251,7 @@ class Article {
      * @param \Application\Sonata\UserBundle\Entity\User $author
      * @return Article
      */
-    public function setAuthor(\Application\Sonata\UserBundle\Entity\User $author)
+    public function setAuthor(\Application\Sonata\UserBundle\Entity\User $author = null)
     {
         $this->author = $author;
 
@@ -291,9 +266,5 @@ class Article {
     public function getAuthor()
     {
         return $this->author;
-    }
-    
-    public function __toString() {
-    	return $this->title;
     }
 }

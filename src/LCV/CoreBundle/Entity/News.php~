@@ -25,7 +25,7 @@ class News
     /**
      * @var LCV\CoreBundle\Entity\Content
      *
-     * @ORM\OneToOne(targetEntity="LCV\CoreBundle\Entity\Content",orphanRemoval=true)
+     * @ORM\OneToOne(targetEntity="LCV\CoreBundle\Entity\Content")
      */
     private $content;
 
