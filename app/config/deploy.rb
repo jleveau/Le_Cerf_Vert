@@ -1,10 +1,10 @@
 set :application, "Le-Cerf-Vert"
-set :domain,      "lecerfvert.net@ssh.lecerfvert.net"
-set :deploy_to,   "/Le-Cerf-Vert"
+set :domain,      "ssh.lecerfvert.net"
+set :deploy_to,   "/home/lecerfvert.net/www/Le-Cerf-Vert"
 set :app_path,    "app"
 set :user, "lecerfvert.net"
 
-set :repository,  "https://github.com/jleveau/Le_Cerf_Vert"
+set :repository,  "git@github.com:jleveau/Le_Cerf_Vert.git"
 set :scm,         :git
 # Or: `accurev`, `bzr`, `cvs`, `darcs`, `subversion`, `mercurial`, `perforce`, or `none`
 
@@ -12,7 +12,7 @@ set :deploy_via, :copy
 
 set :model_manager, "doctrine"
 # Or: `propel`
-set :use_sudo, true
+set :use_sudo, false
 
 role :web,        domain                         # Your HTTP server, Apache/etc
 role :app,        domain, :primary => true       # This may be the same as your `Web` server
