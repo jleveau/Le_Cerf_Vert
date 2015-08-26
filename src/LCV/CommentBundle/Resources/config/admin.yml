@@ -1,0 +1,12 @@
+services:
+    sonata.admin.comment:
+        class: LCV\CommentBundle\Admin\CommentAdmin
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: "Commentaires", label: "Commentaires" }
+        arguments:
+            - ~
+            - LCV\CommentBundle\Entity\Comment
+            - ~
+        calls:
+            - [ setTranslationDomain, [LCVCoreBundle]]
+            

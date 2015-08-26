@@ -67,10 +67,26 @@ class ArticleRepository extends EntityRepository {
     	$query = $this->createQueryBuilder('a')
     	->leftJoin('a.category','c')
     	->addSelect('c')
-    	->orderBy('a.date','DESC')
+        ->leftJoin('a.rate','r')
+        ->addSelect('r')
+        ->orderBy('c.name','ASC')
     	->getQuery();
     
     	return $query->getResult();
     }
+    
+    public function getArticleVoteUser($article_id,$user){
+        $query = $this->createQueryBuilder('article')
+        ->where('article.id = :article_id')
+        ->leftJoin('article.rate','rate')
+        ->addSelect('rate')
+        ->leftJoin('rate.votes','vote')
+        ->andWhere('vote.voter = :user')
+        ->setParameters(array('user' => $user, 'article_id' => $article_id))
+        ->getQuery();
+        
+        return $query->getResult();
+    }
+    
 
 }

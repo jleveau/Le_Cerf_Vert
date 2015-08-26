@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
+ * @ORM\Entity(repositoryClass="LCV\PlatformBundle\Entity\CategoryRepository")
+ * 
  */
 class Category {
     /**
@@ -20,6 +22,11 @@ class Category {
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+    
+        /**
+     * @ORM\Column(name="ramovable", type="boolean")
+     */
+    private $removable;
 
     /**
      * @ORM\OneToMany(targetEntity="LCV\PlatformBundle\Entity\Article", mappedBy="category")
@@ -51,10 +58,10 @@ class Category {
     /**
      * Add articles
      *
-     * @param \OC\PlatformBundle\Entity\Article $articles
+     * @param \LCV\PlatformBundle\Entity\Article $articles
      * @return Category
      */
-    public function addArticle(\OC\PlatformBundle\Entity\Article $article)
+    public function addArticle(\LCV\PlatformBundle\Entity\Article $article)
     {
         $this->articles[] = $article;
         $article->setCategory($this);
@@ -65,9 +72,9 @@ class Category {
     /**
      * Remove articles
      *
-     * @param \OC\PlatformBundle\Entity\Article $articles
+     * @param \LCV\PlatformBundle\Entity\Article $articles
      */
-    public function removeArticle(\OC\PlatformBundle\Entity\Article $articles)
+    public function removeArticle(\LCV\PlatformBundle\Entity\Article $articles)
     {
         $this->articles->removeElement($articles);
     }
@@ -80,5 +87,9 @@ class Category {
     public function getArticles()
     {
         return $this->articles;
+    }
+    
+    public function __toString() {
+    	return $this->name;
     }
 }

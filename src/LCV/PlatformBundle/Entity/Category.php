@@ -22,6 +22,11 @@ class Category {
      * @ORM\Column(name="name", type="string", length=255)
      */
     private $name;
+    
+        /**
+     * @ORM\Column(name="ramovable", type="boolean")
+     */
+    private $removable;
 
     /**
      * @ORM\OneToMany(targetEntity="LCV\PlatformBundle\Entity\Article", mappedBy="category")
@@ -48,6 +53,7 @@ class Category {
     public function __construct()
     {
         $this->articles = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->removable=true;
     }
 
     /**
@@ -86,5 +92,28 @@ class Category {
     
     public function __toString() {
     	return $this->name;
+    }
+
+    /**
+     * Set removable
+     *
+     * @param boolean $removable
+     * @return Category
+     */
+    public function setRemovable($removable)
+    {
+        $this->removable = $removable;
+
+        return $this;
+    }
+
+    /**
+     * Get removable
+     *
+     * @return boolean 
+     */
+    public function getRemovable()
+    {
+        return $this->removable;
     }
 }

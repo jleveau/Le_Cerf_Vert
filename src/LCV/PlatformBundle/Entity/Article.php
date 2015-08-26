@@ -8,7 +8,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
-use LCV\PlatformBundle\Validator\Antiflood;
+use LCV\CoreBundle\Entity\Rating;
+
 
 /**
  * Article
@@ -38,7 +39,7 @@ class Article {
     /**
      * @var Application\Sonata\UserBundle\Entity\User
      *
-     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="articles" )
      */
     private $author;
 
@@ -55,11 +56,20 @@ class Article {
     private $category;
 
     /**
+     * @ORM\OneToMany(targetEntity="LCV\CommentBundle\Entity\Comment", mappedBy="article", cascade={"remove"})
+     */
+    private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="LCV\CoreBundle\Entity\Notification", mappedBy="article", cascade={"remove"})
+     */
+    private $notifications;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="content", type="text")
      * @Assert\NotBlank()
-     * @Antiflood()
      */
     private $content;
 
@@ -74,6 +84,22 @@ class Article {
      */
     private $slug;
 
+    /**
+     * @ORM\OneToOne(targetEntity="LCV\CoreBundle\Entity\Rating", cascade={"persist","remove"})
+     */
+    private $rate;
+    
+    /**
+     * @var integer
+     * @ORM\Column(name="view", type="integer",options={"default" = 0})
+     */
+    private $view;
+    
+     /**
+     * @ORM\OneToOne(targetEntity="LCV\CoreBundle\Entity\News", mappedBy="article", orphanRemoval=true)
+     **/
+    private $new;
+    
     ////////////
     /**
      * @ORM\PreUpdate
@@ -82,10 +108,16 @@ class Article {
         $this -> setUpdatedAt(new \DateTime());
     }
 
+    public function incViews() {
+        $this -> setView($this->getView()+1);
+    }
+
     ///////////
 
     public function __construct() {
         $this -> date = new \DateTime();
+        $this -> updatedAt = $this -> date;
+        $this->view=0;
     }
 
     /**
@@ -175,16 +207,14 @@ class Article {
         return $this -> title;
     }
 
-
     /**
      * Set title
      *
      * @param string $title
      * @return Article
      */
-    public function setTitle($title)
-    {
-        $this->title = $title;
+    public function setTitle($title) {
+        $this -> title = $title;
 
         return $this;
     }
@@ -192,11 +222,10 @@ class Article {
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
-    public function getTitle()
-    {
-        return $this->title;
+    public function getTitle() {
+        return $this -> title;
     }
 
     /**
@@ -205,9 +234,8 @@ class Article {
      * @param \DateTime $date
      * @return Article
      */
-    public function setDate($date)
-    {
-        $this->date = $date;
+    public function setDate($date) {
+        $this -> date = $date;
 
         return $this;
     }
@@ -215,11 +243,10 @@ class Article {
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getDate()
-    {
-        return $this->date;
+    public function getDate() {
+        return $this -> date;
     }
 
     /**
@@ -228,9 +255,8 @@ class Article {
      * @param \DateTime $updatedAt
      * @return Article
      */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
+    public function setUpdatedAt($updatedAt) {
+        $this -> updatedAt = $updatedAt;
 
         return $this;
     }
@@ -238,11 +264,10 @@ class Article {
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
+    public function getUpdatedAt() {
+        return $this -> updatedAt;
     }
 
     /**
@@ -251,9 +276,8 @@ class Article {
      * @param \Application\Sonata\UserBundle\Entity\User $author
      * @return Article
      */
-    public function setAuthor(\Application\Sonata\UserBundle\Entity\User $author = null)
-    {
-        $this->author = $author;
+    public function setAuthor(\Application\Sonata\UserBundle\Entity\User $author = null) {
+        $this -> author = $author;
 
         return $this;
     }
@@ -261,10 +285,138 @@ class Article {
     /**
      * Get author
      *
-     * @return \Application\Sonata\UserBundle\Entity\User 
+     * @return \Application\Sonata\UserBundle\Entity\User
      */
-    public function getAuthor()
+    public function getAuthor() {
+        return $this -> author;
+    }
+
+    /**
+     * Add comments
+     *
+     * @param \LCV\CommentBundle\Entity\Comment $comments
+     * @return Article
+     */
+    public function addComment(\LCV\CommentBundle\Entity\Comment $comments) {
+        $this -> comments[] = $comments;
+        $comments -> setArticle($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \LCV\CommentBundle\Entity\Comment $comments
+     */
+    public function removeComment(\LCV\CommentBundle\Entity\Comment $comments) {
+        $this -> comments -> removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments() {
+        return $this -> comments;
+    }
+
+    /**
+     * Add notifications
+     *
+     * @param \LCV\CoreBundle\Entity\Notification $notifications
+     * @return Article
+     */
+    public function addNotification(\LCV\CoreBundle\Entity\Notification $notifications) {
+        $this -> notifications[] = $notifications;
+
+        return $this;
+    }
+
+    /**
+     * Remove notifications
+     *
+     * @param \LCV\CoreBundle\Entity\Notification $notifications
+     */
+    public function removeNotification(\LCV\CoreBundle\Entity\Notification $notifications) {
+        $this -> notifications -> removeElement($notifications);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getNotifications() {
+        return $this -> notifications;
+    }
+
+    /**
+     * Set view
+     *
+     * @param integer $view
+     * @return Article
+     */
+    public function setView($view) {
+        $this -> view = $view;
+
+        return $this;
+    }
+
+    /**
+     * Get view
+     *
+     * @return integer
+     */
+    public function getView() {
+        return $this -> view;
+    }
+
+
+    /**
+     * Set rate
+     *
+     * @param \LCV\CoreBundle\Entity\Rating $rate
+     * @return Article
+     */
+    public function setRate(\LCV\CoreBundle\Entity\Rating $rate = null)
     {
-        return $this->author;
+        $this->rate = $rate;
+
+        return $this;
+    }
+
+    /**
+     * Get rate
+     *
+     * @return \LCV\CoreBundle\Entity\Rating 
+     */
+    public function getRate()
+    {
+        return $this->rate;
+    }
+
+    /**
+     * Set new
+     *
+     * @param \LCV\CoreBundle\Entity\News $new
+     * @return Article
+     */
+    public function setNew(\LCV\CoreBundle\Entity\News $new = null)
+    {
+        $this->new = $new;
+
+        return $this;
+    }
+
+    /**
+     * Get new
+     *
+     * @return \LCV\CoreBundle\Entity\News 
+     */
+    public function getNew()
+    {
+        return $this->new;
     }
 }

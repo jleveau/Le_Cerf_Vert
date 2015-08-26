@@ -6,12 +6,16 @@ services:
        class: Twig_Extensions_Extension_Intl
        tags:
            - { name: twig.extension }
-    oc_platform.doctrine.newscreation:
-        class: LCV\CoreBundle\DoctrineListener\NewsCreator
-        arguments: []
-        tags:
-            - { name: doctrine.event_listener, event: postPersist}
-  
             
-parameters:
-#    parameter_name: value
+    sonata_user.profile.form.type:
+        class: Application\Sonata\UserBundle\Form\Type\ProfileType
+        arguments: [%fos_user.model.user.class%]
+        tags:
+            - { name: form.type, alias: application_sonata_user_profile }
+            
+    sonata_user.form.handler.profile:
+        class: Application\Sonata\UserBundle\Form\Handler\ProfileFormHandler
+        arguments: ["@sonata.user.profile.form", "@request", "@fos_user.user_manager"]
+        scope: request
+        public: false
+        

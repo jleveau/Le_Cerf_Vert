@@ -14,11 +14,8 @@ class NewsAdmin extends Admin
 	protected function configureFormFields(FormMapper $formMapper)
 	{
 		$formMapper
-		->add('title', 'text', array('label' => 'Titre de l\'article'))
-		->add('author', 'entity', array('class' => 'Application\Sonata\UserBundle\Entity\User'))
-          ->add('content', 'textarea')
-          ->add('date')
-          		
+        ->add('abstract', 'text', array('label' => 'Résumé'))
+		->add('article', 'entity', array('class' => 'LCV\PlatformBundle\Entity\Article'))
 		;
 	}
 	
@@ -26,9 +23,8 @@ class NewsAdmin extends Admin
 	protected function configureDatagridFilters(DatagridMapper $datagridMapper)
 	{
 		$datagridMapper
-		->add('title')
-		->add('author')
-		->add('date')
+		->add('type')
+		->add('article')
 		;
 	}
 	
@@ -36,9 +32,9 @@ class NewsAdmin extends Admin
 	protected function configureListFields(ListMapper $listMapper)
 	{
 		$listMapper
-		->addIdentifier('title')
-		->add('author')
-		->add('date')
-		;
+		->addIdentifier('type')
+		->add('article')
+        ->add('abstract');
+		
 	}
 }

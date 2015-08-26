@@ -1,0 +1,56 @@
+{% extends "SonataUserBundle:Profile:action.html.twig" %}
+
+
+{% block sonata_profile_content %}
+	  <h2>Liste des articles</h2>
+	
+	  <table class="table">
+	    <thead>
+	      <tr>
+	        <th data-sort="string">Titre</th>
+	        <th data-sort="string">Categorie</th>
+	        <th data-sort="string"> Date écriture</th>
+	        <th data-sort="string"> Dernière modification</th>
+        	<th data-sort="string"> vues</th>
+	        <th data-sort="string"> Note </th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	    {% for article in list_articles %}
+		    
+	      <tr>
+	        <td> <a href="{{ path('lcv_platform_view', {'id': article.id}) }}">{{ article.title }} </a> </td>
+	        <td> {{ article.category.name }} </td>
+	        <td> {{ article.date.format('d/m/Y') }} </td>
+	        <td> {{ article.updatedAt.format('d/m/Y') }} </td>
+	        <td> {{ article.view }} </td>
+	        <td><input type="number" class="rating" min=0 max=5 value={{ article.rate.rate }} step=1 data-size="xxs" ></td>
+	        
+	        <td>  <a href="{{ path('lcv_platform_edit', {'id': article.id}) }}" class="btn btn-default">
+			      <i class="glyphicon glyphicon-edit"></i></a>
+			      
+			      <a href="{{ path('user_delete_article', {'id': article.id}) }}" class="btn btn-danger">
+			      <i class="glyphicon glyphicon-trash"></i>
+			    </a>
+			</td>
+			
+	      </tr>
+	    {% endfor %}
+	    </tbody>
+	  </table>
+	
+		<style type="text/css">
+	   
+	    th[data-sort]{
+	      cursor:pointer;
+	    }
+	    tr.awesome{
+	      color: red;
+	    }
+	  </style>
+	    <script>
+	    $(function(){
+	        $("table").stupidtable();
+	    });
+	  </script>
+{% endblock %}

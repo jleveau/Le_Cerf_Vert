@@ -3,21 +3,28 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
   <title>{% block title %}Le Cerf Vert{% endblock %}</title>
    {% block javascripts %}
 	    <!-- Bootstrap -->
 	    <link href="{{ asset('css/bootstrap.css') }}" rel="stylesheet" media="screen">
-	
+	    <script src="{{ asset('js/jquery.js') }}"></script>
+	    <script src="{{ asset('js/bootstrap.js') }}"></script>
+	    {% stylesheets 
+            '%kernel.root_dir%/../vendor/kartik-v/bootstrap-star-rating/css/star-rating.min.css'
+            filter='lessphp,cssrewrite' 
+        %} 
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}   
+		{% javascripts
+		   '@LCVPlatformBundle/Resources/public/js/stupidtable.min.js'
+		   '%kernel.root_dir%/../vendor/kartik-v/bootstrap-star-rating/js/star-rating.min.js'%}
+		   <script type="text/javascript" src="{{ asset_url }}"></script>
+		{% endjavascripts %}
+		
 	    <!-- HTML5 Shim and Respond.js add IE8 support of HTML5 elements and media queries -->
 	    {% include 'BraincraftedBootstrapBundle::ie8-support.html.twig' %}
-   		
-	    <!-- jQuery (necessary for Bootstraps JavaScript plugins) -->
-	    <script src="{{ asset('js/jquery.js') }}"></script>
-	    <!-- Include all JavaScripts, compiled by Assetic -->
-	    <script src="{{ asset('js/bootstrap.js') }}"></script>
-	    
-	    <!-- Barre de navigation  -->
+		
+		<!-- Barre de navigation  -->
 	    <script> type="text/javascript">
 	    $( document ).ready(function() {
 			$('.nav li').click(function(){
@@ -25,24 +32,36 @@
 			    $(this).addClass('active');
 			})
 			
+		
+		    $('.list-group-item').on('click',function(e){
+		        var previous = $(this).closest(".list-group").children(".active");
+		        previous.removeClass('active'); // previous list-item
+		        $(e.target).addClass('active'); // activated list-item
+		      });
+			<!--Star Rating  -->	
+			 $('.rating_form').rating('refresh', {showClear: false, showCaption: false});
+			 $('.rating').rating('refresh', {readonly: true,showClear: false, showCaption: false});
 	    });    
 	    </script>
+		<style>
+			body {
+			     padding-top: 70px;
+			}
+		</style> 
+			  
+
 			
-		{% javascripts 
-					   '@LCVPlatformBundle/Resources/public/js/stupidtable.min.js'%}
-					   <script type="text/javascript" src="{{ asset_url }}"></script>
-		{% endjavascripts %}
   {% endblock %}
 </head>
 
 <body>
-	<nav class="navbar navbar-inverse">
+	<nav class="navbar navbar-inverse navbar-fixed-top">
 	  <div class="container-fluid">
 	    <div class="navbar-header">
 	      <a class="navbar-brand" href="{{ path('_accueil') }}">Le-Cerf-Vert</a>
 	    </div>
 	   <div><ul class="nav navbar-nav">
-        <li class="active"><a href="{{ path('_accueil') }}">Accueil</a></li>
+        <li ><a href="{{ path('_accueil') }}">Accueil</a></li>
         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Articles <span class="caret"></span></a>
 	        <ul class="dropdown-menu">
 	            <li><a href="{{ path('lcv_platform_add') }}">Ecrire un article</a></li>
@@ -57,10 +76,12 @@
         {% endif %}
            	<ul class="dropdown-menu">
         		{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-	            <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
+	        	    <li><a href="{{ path('sonata_user_profile_edit') }}">Dashboard</a></li>
+		            <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
 	            {% else %}
-	            <li><a href="{{ path('fos_user_security_login') }}">Connection</a></li>
-	            <li><a href="{{ path('fos_user_registration_register') }}">Inscription</a></li>
+		            <li><a href="{{ path('fos_user_security_login') }}">Connection</a></li>
+		            <li><a href="{{ path('fos_user_registration_register') }}">Inscription</a></li>
+		            <li><a href="{{ path('user_ask_invitation') }}">Demander une Invitation</a></li>
 	            {% endif %}
 	        </ul>
         </li>
@@ -72,10 +93,49 @@
        </div></ul>  
 	  </div>
 	</nav>
-	    
-{% block body %}
-{% endblock %} <!--  End Block Body -->
-    <hr>
+	<div class="row">
+	    <div class="col-md-1">
+    		<img  src="{{ asset('logo.png') }}" class="img-circle" />
+    		<hr>
+    		{{ render(controller('ApplicationSonataUserBundle:User:whoIsOnline')) }}
+	    </div>
+	     <div class="col-md-9">
+			{% block body %}
+			{% endblock %} <!--  End Block Body -->
+		</div>
+		<div class="col-md-2">
+		
+				{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+		
+		  		{% if app.user.avatar %}
+				   {% media app.user.avatar, 'big'%} 
+				{% endif %}  
+		  
+				<ul class="nav nav-pills" role="tablist">
+				  <li ><a data-toggle="collapse" aria-expanded="false" aria-controls="collapseNotifications" href="#collapseNotifications">Notifications <span class="badge">
+				  		{{app.user.notifications|length}}</span></a></li>
+				  <li ><a href="{{ path('sonata_user_profile_edit') }}">Profile</a></li>
+				</ul>
+				
+				<div class="collapse" id="collapseNotifications">
+				  <div>
+				      <ul class="list-group">
+				 	  {% for notification in app.user.notifications%}
+				 	  	{% if notification.type == 'comment' %}
+						  <li class="list-group-item">{{notification.message|raw}}<a href="{{ path('lcv_platform_view',{id : notification.article.id}) }}">{{notification.article.title}}</a> </li>
+						{% endif %}
+				 	  {% endfor %}
+				 	  {% if not app.user.notifications is empty  %}
+					 	  <a href="{{ path('_delete_notifications') }}" type="button" class="btn btn-primary btn-sm">Effacer</a>
+				 	  {% endif %}
+				 	  
+				 	  </ul>
+				   </div>
+			    </div>
+				{% endif %}  
+		  </div> 
+	</div>
+	<hr>
 
     <footer>
      

@@ -1,0 +1,11 @@
+<p id="who-is-online">
+	<span class="btn btn-primary" role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+		Utilisateurs en ligne <span class="badge">{{ users|length }}</span>
+	</span>
+
+    
+    
+    <div class="collapse" id="collapseExample">
+	 	<strong>  {{ users|join(' ')  }} </strong>
+	</div>
+</p>

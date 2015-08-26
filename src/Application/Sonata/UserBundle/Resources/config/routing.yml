@@ -1,0 +1,14 @@
+user_delete_article:
+    path:     /{id}
+    defaults: { _controller: ApplicationSonataUserBundle:User:profileDeleteArticle }
+    requirements:
+        id: \d+
+        
+user_articles:
+    path:     /
+    defaults: { _controller: ApplicationSonataUserBundle:User:profileArticles }
+            
+user_ask_invitation:
+    path:     /ask
+    defaults: { _controller: ApplicationSonataUserBundle:User:askInvitation }
+

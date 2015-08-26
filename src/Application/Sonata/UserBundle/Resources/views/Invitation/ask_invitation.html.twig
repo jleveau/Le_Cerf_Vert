@@ -1,0 +1,19 @@
+{% extends "::layout.html.twig" %}
+{% block body %}
+	{% block fos_user_content %}
+	<div class="col-md-9 col-md-offset-2">
+		<div class="panel panel-success">
+			
+				    <div class="panel-heading">
+				        <h2 class="panel-title">Demande d'invitation</h2>
+				    </div>
+				    <p class="bg-info">Un code invitation vous sera envoyé quand l'administrateur aura validé votre demande</p>
+				    <div class="panel-body">
+				           	{{ form(form) }}
+
+				    </div>
+				</div>
+			</div>
+		
+	{% endblock fos_user_content %}
+{% endblock body %}

@@ -29,18 +29,28 @@ class AppKernel extends Kernel
         		
         	// Then add SonataMedia & Dependancies
         	new Sonata\AdminBundle\SonataAdminBundle(),
-        	new JMS\SerializerBundle\JMSSerializerBundle(),
         	new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
         	new Sonata\MediaBundle\SonataMediaBundle(),
         	new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
-        	new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
         	new CoopTilleuls\Bundle\CKEditorSonataMediaBundle\CoopTilleulsCKEditorSonataMediaBundle(),
+        	
+            new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
         	new Application\Sonata\UserBundle\ApplicationSonataUserBundle(),
 
             new LCV\CoreBundle\LCVCoreBundle(),
         		
         	//Bootstrap bundle
-        	new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle()
+        	new Braincrafted\Bundle\BootstrapBundle\BraincraftedBootstrapBundle(),
+            
+            //FOSCommentBundle
+            
+            //Rest api
+            new FOS\RestBundle\FOSRestBundle(),
+            new JMS\SerializerBundle\JMSSerializerBundle(),
+
+
+            new LCV\CommentBundle\LCVCommentBundle(),
+            new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
@@ -49,7 +59,6 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\DistributionBundle\SensioDistributionBundle();
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
-            
            
         }
 

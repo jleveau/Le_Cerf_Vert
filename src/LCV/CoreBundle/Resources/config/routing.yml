@@ -1,3 +1,8 @@
+_delete_notifications:
+    path:     /delete_notification
+    defaults: { _controller: LCVCoreBundle:Notification:delete }
+
 _accueil:
     path:     /
     defaults: { _controller: LCVCoreBundle:Accueil:accueil }
+    

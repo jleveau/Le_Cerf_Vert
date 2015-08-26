@@ -7,7 +7,21 @@
 {% block lcvplatform_body %}
 
 
-
+       <form action="{{ path('lcv_platform_index') }}" method="POST" class="form-inline">
+    
+ 	   {{ form_errors(form) }}
+		  <div class="form-group">
+		  {{ form_label(form.name, "Créer une catégorie")}}
+	      {{ form_errors(form.name) }}
+	      {{ form_widget(form.name) }}
+		  </div>
+		  {{ form_widget(form.save,{ 'label': 'Créer' }) }}
+		  
+	      {{ form_rest(form) }}
+  {# Fermeture de la balise <form> du formulaire HTML #}
+  
+  {{ form_end(form) }}
+<hr>
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
   <div class="panel panel-default">
   
@@ -19,7 +33,14 @@
       	
         <a class="collapsed col-md-11" role="button" data-toggle="collapse" data-parent="#accordion" href="{{"#collapse" ~ cat.id }}" aria-expanded="false" aria-controls="{{"collapse" ~ cat.id }}">
           {{  cat.name }}                                               
-        <a type="button" class="btn btn-primary glyphicon glyphicon-pencil col-md-1" href="{{ path('lcv_platform_add', {'id': cat.id}) }}"> </a>
+        <a type="button" style="color:green" title="ajouter un article" class="glyphicon glyphicon-plus-sign" href="{{ path('lcv_platform_add', {'categoryId': cat.id}) }}"> </a>
+		{% if cat.removable %}
+			{% if cat.articles is empty %}
+			    <a type="button" style="color:red" class="glyphicon glyphicon-minus-sign" href="{{ path('lcv_platform_delete_category', {'id': cat.id}) }}"> </a>
+	        {% else %}
+	        	<a type="button" style="color:red" class="glyphicon glyphicon-minus-sign" data-toggle="popover" data-placement="left" data-content="Il y a des articles là dedans !" > </a>
+			{% endif %}
+		{% endif %}
         </div>
       </h4>
     </div>
@@ -34,6 +55,8 @@
 			        <th data-sort="string">Auteur</th>
 			        <th data-sort="string"> Dernière modification</th>
 			        <th data-sort="string"> Date écriture</th>
+			        <th data-sort="string"> Vues </th>
+			        <th data-sort="string"> Note </th>
 			      </tr>
 			    </thead>
 			    <tbody>
@@ -44,9 +67,12 @@
 			        <td> {{ article.author.username }} </td>
 			        <td> {{ article.updatedAt.format('d/m/Y') }} </td>
 			        <td> {{ article.date.format('d/m/Y') }} </td>
+			        <td> {{ article.view }} </td>
+			        <td><input type="number" class="rating" min=0 max=5 value={{ article.rate.rate }} step=1 data-size="xxs" ></td>
 			      </tr>
 			        {% endif %}
 			    {% endfor %}
+
 			
 			    </tbody>
 			  </table>
@@ -56,8 +82,9 @@
     {% endfor %}
   </div>
 </div>
-  
 
+
+  
 <style type="text/css">
 	   
 	    th[data-sort]{
@@ -71,9 +98,11 @@
 	    $(function(){
 	        $("table").stupidtable();
 	    });
-	  </script>
-	  
-	  
+
+		$(document).ready(function(){
+		    $('[data-toggle="popover"]').popover(); 
+		});
+		</script>
 	  
 	{% block lcv_platform_list_articles %}
 

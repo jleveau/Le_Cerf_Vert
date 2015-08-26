@@ -5,43 +5,74 @@
 {% endblock %}
 
 {% block lcvplatform_body %}
+	  <h2>{{ article.title }}</h2>
+	
+	  <p class="lead">Par {{ article.author }} </br>
+	  {% if not article.category == null %}
+	   Catégorie :
+	      {{ article.category.name }}
+	  {% endif %}
+	  </br>
+	  	 <small>  <span class="glyphicon glyphicon-time"> {{ article.date|date('d/m/Y') }}  </span> mis à jour le : <span class="glyphicon">{{ article.updatedAt|date('d/m/Y') }}</span></small> </br>
+		 <small>  <span class="glyphicon glyphicon-eye-open">  {{article.view}} </span></small></br>  
+	  
+	 	{{ form_start(form_vote, {'attr': {'class': 'form-inline'}}) }}
+	    {{ form_errors(form_vote) }}
+	    <div class="form-group">
+		{{ form_label(form_vote.value,'Note ('~rate.votes|length ~ ')') }}
+	    {{ form_errors(form_vote.value) }}
+	    {{ form_widget(form_vote.value) }}  
+	    
+	    
+	    </div>
+	    
+	    {{ form_widget(form_vote.save,{ 'label': "Voter" } ) }}
+		{{ form_rest(form_vote) }}
+		{{ form_end(form_vote) }}
 
-  <h2>{{ article.title }}</h2>
+	    <hr>
+	    <div class="center-block">{{ article.content |raw}}</div>
+	    <hr>
+	
+	    <a href="{{ path('lcv_platform_index') }}" class="btn btn-default">
+	      <i class="glyphicon glyphicon-chevron-left"></i>
+	      Categories
+	    </a>
+	    <a href="{{ path('lcv_platform_list_articles') }}" class="btn btn-default">
+	      <i class="glyphicon glyphicon-chevron-left"></i>
+	      Liste des articles
+	    </a>
+	    {% if app.user ==  article.author%}
+	    <a href="{{ path('lcv_platform_edit', {'id': article.id}) }}" class="btn btn-default">
+	      <i class="glyphicon glyphicon-edit"></i>
+	      Modifier l'article
+	    </a>
+	    <a href="{{ path('lcv_platform_delete', {'id': article.id}) }}" class="btn btn-danger">
+	      <i class="glyphicon glyphicon-trash"></i>
+	      Supprimer l'article
+	    </a>
+	    {% endif %}
+	    
+	    <hr>
+		<div class="well">
+		  <h4>Laisser un commentaire</h4>
+		    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+	    {{ form_errors(form) }}
+	    
+	 	<div class="form-group">
+			{{ form_label(form.content,' ') }}
+		    {{ form_errors(form.content) }}
+		    {{ form_widget(form.content) }}
+	    </div>
+	    
+	    {{ form_widget(form.save,{ 'label': "Enregistrer" } ) }}
+	    
+	 {{ form_rest(form) }}
+	 
+	 {{ form_end(form) }}
+	</div>
+	<hr>
 
-  <i>Par {{ article.author }}, le {{ article.date|date('d/m/Y') }}</i>
-  
-  {% if not article.category == null %}
-  <p>
-   Dans la catégorie :
-      "{{ article.category.name }}"
-  </p>
-{% endif %}
-    	
-  <div class="well">
-
-    <div class="center-block">{{ article.content |raw}}</div>
-  </div>
-
-  <p>
-    <a href="{{ path('lcv_platform_index') }}" class="btn btn-default">
-      <i class="glyphicon glyphicon-chevron-left"></i>
-      Categories
-    </a>
-    <a href="{{ path('lcv_platform_list_articles') }}" class="btn btn-default">
-      <i class="glyphicon glyphicon-chevron-left"></i>
-      Liste des articles
-    </a>
-    {% if app.user ==  article.author%}
-    <a href="{{ path('lcv_platform_edit', {'id': article.id}) }}" class="btn btn-default">
-      <i class="glyphicon glyphicon-edit"></i>
-      Modifier l'article
-    </a>
-    <a href="{{ path('lcv_platform_delete', {'id': article.id}) }}" class="btn btn-danger">
-      <i class="glyphicon glyphicon-trash"></i>
-      Supprimer l'article
-    </a>
-    {% endif %}
-
-  </p>
+	{{ render(controller("LCVCommentBundle:Comment:view", {'article_id': article.id })) }}
 
 {% endblock %}

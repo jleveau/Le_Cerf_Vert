@@ -2,28 +2,7 @@ services:
 #    lcv_platform.example:
 #        class: LCV\PlatformBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
-    lcv_platform.antispam:
-        class: LCV\PlatformBundle\Antispam\OCAntispam
-        arguments: [@mailer,%locale%,50]
-        
-    lcv_platform.doctrine.notification:
-        class: LCV\PlatformBundle\DoctrineListener\CommentNotification
-        arguments: [@mailer]
-        tags:
-            - { name: doctrine.event_listener, event: postPersist }
-            
-    lcv_platform.validator.antiflood:                              # Le nom du service
-        class: LCV\PlatformBundle\Validator\AntifloodValidator     # La classe du service, ici notre validateur déjà créé
-        arguments: [@request_stack, @doctrine.orm.entity_manager] # Les données qu'on injecte au service : la requête et l'EntityManager
-        tags:
-            - { name: validator.constraint_validator, alias: lcv_platform_antiflood }  # C'est avec l'alias qu'on retrouvera le service
-           
-    lcv_platform.antispam:
-        class:     LCV\PlatformBundle\Antispam\OCAntispam
-        arguments: [@mailer, %locale%, 50]
-        tags:
-            -  { name: twig.extension }
-            
+
     lcv_platform.beta.html:
         class: LCV\PlatformBundle\Beta\BetaHTML
         

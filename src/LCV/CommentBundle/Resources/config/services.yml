@@ -1,0 +1,10 @@
+services:
+#    lcv_comment.example:
+#        class: LCV\CommentBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    lcv_comment.doctrine.notification_creation:
+        class: LCV\CoreBundle\DoctrineListener\NotificationCreator
+        arguments: 
+            - "@service_container"
+        tags:
+            - { name: doctrine.event_listener, event: postPersist}

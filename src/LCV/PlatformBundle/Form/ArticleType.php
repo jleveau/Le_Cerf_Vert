@@ -5,10 +5,7 @@ namespace LCV\PlatformBundle\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
-
 use LCV\PlatformBundle\Entity\ArticleRepository;
 
 
@@ -67,8 +64,6 @@ class ArticleType extends AbstractType
               'property' => 'name'))
         ;
 
-        
-       
     }
     
     /**

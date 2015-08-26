@@ -5,7 +5,10 @@ imports:
     - { resource: sonata_core.yml }
     - { resource: @LCVPlatformBundle/Resources/config/admin.yml }
     - { resource: @LCVCoreBundle/Resources/config/admin.yml }
-    
+    - { resource: @LCVCoreBundle/Resources/config/services.yml }
+    - { resource: @ApplicationSonataUserBundle/Resources/config/services.yml }
+    - { resource: @ApplicationSonataUserBundle/Resources/config/admin.yml }
+    - { resource: @LCVCommentBundle/Resources/config/admin.yml }
     
 
 # Put parameters here that don't need to change on each machine where the app is deployed
@@ -85,7 +88,8 @@ doctrine:
                     ApplicationSonataUserBundle: ~
                     SonataUserBundle: ~
                     FOSUserBundle: ~
-                    ApplicationSonataMediaBundle: ~
+                    ApplicationSonataUserBundle: 
+                        type: annotation
                     SonataMediaBundle: ~
                     LCVPlatformBundle: ~
                 
@@ -112,6 +116,15 @@ fos_user:
         group_manager: sonata.user.orm.group_manager                    # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
     service:
         user_manager: sonata.user.orm.user_manager                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
+    profile:  # Authentication Form
+        form:
+            type:               fos_user_profile
+            handler:            fos_user.profile.form.handler.default
+            name:               fos_user_profile_form
+            validation_groups:  [Authentication] # Please note : this is not the default value
+    registration:
+        form:
+            type: app_user_registration
             
 ivory_ck_editor:
     default_config: default
@@ -130,10 +143,7 @@ ivory_ck_editor:
             filebrowserImageUploadRouteParameters:
                 provider: sonata.media.provider.image
             enterMode: CKEDITOR.ENTER_BR
-    plugins:
-        colorbutton:
-            path:     "/bundles/ivoryckeditor/plugins/colorbutton/"
-            filename: "plugin.js"
+
             
         
 sonata_block:
@@ -177,24 +187,31 @@ sonata_media:
     db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr
     contexts:
         default:  # the default context is mandatory
-            download:
-                strategy: sonata.media.security.public_strategy
-                mode: http
             providers:
                 - sonata.media.provider.dailymotion
                 - sonata.media.provider.youtube
                 - sonata.media.provider.image
                 - sonata.media.provider.file
+    
             formats:
                 small: { width: 100 , quality: 70}
                 big:   { width: 500 , quality: 70}
+                
+        profile:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 100 , quality: 95}
+                big:   { width: 250 , quality: 90}
+            
+            
     cdn:
         server:
             path: /Le_Cerf_Vert/web/uploads/media # http://media.sonata-project.org/
     filesystem:
         local:
-            directory:  /Le_Cerf_Vert/uploads/media
-            create:     false
+            directory:  %kernel.root_dir%/../web/uploads/media
+            create:     true
             
 sonata_doctrine_orm_admin:
     # default value is null, so doctrine uses the value defined in the configuration
@@ -237,22 +254,18 @@ sonata_doctrine_orm_admin:
                 
                 
 sonata_user:
+    security_acl:     false
+    class:
+        user: Application\Sonata\UserBundle\Entity\User
+        group: Application\Sonata\UserBundle\Entity\Group
     profile:
+        form:
+            type:               application_sonata_user_profile
+            handler:            sonata_user.form.handler.profile
+            name:               sonata_user_profile_form
+            validation_groups:  [Profile]
         # Profile show page is a dashboard as in SonataAdminBundle
-        dashboard:
-            blocks:
-                - { position: left, type: sonata.block.service.text, settings: { content: "<h2>Welcome!</h2> This is a sample user profile dashboard, feel free to override it in the configuration! Want to make this text dynamic? For instance display the user's name? Create a dedicated block and edit the configuration!"} }
-                - { position: left, type: sonata.order.block.recent_orders, settings: { title: Recent Orders, number: 5, mode: public }}
-                - { position: right, type: sonata.timeline.block.timeline, settings: { max_per_page: 15 }}
-                - { position: right, type: sonata.news.block.recent_posts, settings: { title: Recent Posts, number: 5, mode: public }}
-                - { position: right, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 5, mode: public }}
-        # Customize user portal menu by setting links
-        menu:
-            - { route: 'sonata_user_profile_show', label: 'sonata_profile_title', domain: 'SonataUserBundle'}
-            - { route: 'sonata_user_profile_edit', label: 'link_edit_profile', domain: 'SonataUserBundle'}
-            - { route: 'sonata_customer_addresses', label: 'link_list_addresses', domain: 'SonataCustomerBundle'}
-            - { route: 'sonata_user_profile_edit_authentication', label: 'link_edit_authentication', domain: 'SonataUserBundle'}
-            - { route: 'sonata_order_index', label: 'order_list', domain: 'SonataOrderBundle'}
+
             
          
 
@@ -263,3 +276,12 @@ braincrafted_bootstrap:
     jquery_path: %kernel.root_dir%/../vendor/jquery/jquery/jquery-1.11.1.js
     less_filter: less # "less", "lessphp", "sass" or "none"
     fonts_dir: %kernel.root_dir%/../web/fonts
+
+twig:
+    debug:            %kernel.debug%
+    strict_variables: %kernel.debug%
+
+    form:
+        resources:
+            # other files
+            - 'SonataMediaBundle:Form:media_widgets.html.twig'

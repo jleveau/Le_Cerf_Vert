@@ -1,0 +1,47 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+{% extends "::layout.html.twig" %}
+
+{% block body %}
+	<div class="container">
+		{% block sonata_page_breadcrumb %}
+		    {% if breadcrumb_context is not defined %}
+		        {% set breadcrumb_context = 'user_index' %}
+		    {% endif %}
+		    
+		    <div class="row-fluid clearfix">
+		      {{ sonata_block_render_event('breadcrumb', { 'context': breadcrumb_context, 'current_uri': app.request.requestUri }) }}
+		    </div>
+		{% endblock %}
+		
+		<div id="header" class="page-header"><h1>{{app.user.username}}</h1></div>
+		<div class="sonata-user-show row row-fluid">
+		    <div class="span2 col-md-2" style="padding: 8px 0;">
+
+		        {% block sonata_profile_menu %}
+		        	
+		        	<div class="cms-block cms-block-element">
+		        		<div class="list-group">
+		        			<a href="{{ path('sonata_user_profile_edit') }}" class="list-group-item">Mon profil</a>
+		        			<a href="{{ path('user_articles') }}" class="list-group-item">Mes Articles</a>
+		        		</div>  
+		        	</div>
+		        	
+		        {% endblock %}
+		    </div>
+			<div class="span2 col-md-9 col-md-offset-1" style="padding: 8px 0;">
+		        {% include 'SonataCoreBundle:FlashMessage:render.html.twig' %}
+		        {% block sonata_profile_content '' %}
+			</div>
+		</div>
+	</div>
+	
+{% endblock %}

@@ -1,0 +1,117 @@
+<?php
+// src/MyProject/MyBundle/Entity/Rating.php
+
+namespace LCV\CoreBundle\Entity;
+
+use DCS\RatingBundle\Entity\Rating as BaseRating;
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ */
+class Rating
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="string")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @ORM\OneToMany(targetEntity="LCV\CoreBundle\Entity\Vote", mappedBy="rating")
+     */
+    private $votes;
+    
+     /**
+     * @ORM\Column(name="rate", type="string", unique=false,nullable=true)
+     */
+    private $rate;
+    
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->votes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set id
+     *
+     * @param string $id
+     * @return Rating
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get id
+     *
+     * @return string 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set value
+     *
+     * @param integer $value
+     * @return Rating
+     */
+    public function setValue($value)
+    {
+        $this->value = $value;
+
+        return $this;
+    }
+
+    /**
+     * Get value
+     *
+     * @return integer 
+     */
+    public function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Add votes
+     *
+     * @param \LCV\CoreBundle\Entity\Vote $votes
+     * @return Rating
+     */
+    public function addVote(\LCV\CoreBundle\Entity\Vote $votes)
+    {
+        $this->votes[] = $votes;
+
+        return $this;
+    }
+
+    /**
+     * Remove votes
+     *
+     * @param \LCV\CoreBundle\Entity\Vote $votes
+     */
+    public function removeVote(\LCV\CoreBundle\Entity\Vote $votes)
+    {
+        $this->votes->removeElement($votes);
+    }
+
+    /**
+     * Get votes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVotes()
+    {
+        return $this->votes;
+    }
+}

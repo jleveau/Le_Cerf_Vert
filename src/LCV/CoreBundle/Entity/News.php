@@ -22,14 +22,44 @@ class News
     private $id;
     
 
-    /**
-     * @var LCV\CoreBundle\Entity\Content
+     /**
+     * @var LCV\PlatformBundle\Entity\Article
      *
-     * @ORM\OneToOne(targetEntity="LCV\CoreBundle\Entity\Content")
+     * @ORM\OneToOne(targetEntity="LCV\PlatformBundle\Entity\Article", inversedBy="new")
+     * @ORM\JoinColumn(name="article_id", nullable=true)
      */
-    private $content;
+    private $article;
 
-
+    /**
+     * @var string
+     * @ORM\Column(name="type", type="string", length=255)
+     */
+    private $type;
+    
+    /**
+     * @var string
+     * @ORM\Column(name="abstract", type="string", length=255)
+     */
+    private $abstract;
+    
+     /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate() {
+        $this -> setUpdatedAt(new \DateTime());
+    }
+    
+    public function createAbstract($s){
+        $abstract = substr($s,0,-255);
+        if (!$abstract){
+            $this->setAbstract($s);
+        }
+        else{
+            $abstract.= " ... </p>";
+            $this->setAbstract($abstract);
+        }
+    }
+    
     /**
      * Get id
      *
@@ -61,5 +91,73 @@ class News
     public function getContent()
     {
         return $this->content;
+    }
+
+    /**
+     * Set article
+     *
+     * @param LCV\PlatformBundle\Entity\Article $article
+     * @return News
+     */
+    public function setArticle($article)
+    {
+        $this->article = $article;
+        return $this;
+    }
+
+    /**
+     * Get article
+     *
+     * @return LCV\PlatformBundle\Entity\Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     * @return News
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string 
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set abstract
+     *
+     * @param string $abstract
+     * @return News
+     */
+    public function setAbstract($abstract)
+    {
+        $this->abstract = $abstract;
+
+        return $this;
+    }
+
+    /**
+     * Get abstract
+     *
+     * @return string 
+     */
+    public function getAbstract()
+    {
+        return $this->abstract;
     }
 }

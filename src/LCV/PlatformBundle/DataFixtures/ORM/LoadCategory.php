@@ -11,12 +11,13 @@ class LoadCategory implements FixtureInterface {
     // Dans l'argument de la méthode load, l'objet $manager est l'EntityManager
     public function load(ObjectManager $manager) {
         // Liste des noms de catégorie à ajouter
-        $names = array('Jeu de Role', 'League of Legend', 'StarCraft2', 'Divers');
+        $names = array('Annonces',"Bug Report","Evolution du site",'Default');
 
         foreach ($names as $name) {
             // On crée la catégorie
             $category = new Category();
             $category -> setName($name);
+            $category -> setRemovable(false);
 
             // On la persiste
             $manager -> persist($category);

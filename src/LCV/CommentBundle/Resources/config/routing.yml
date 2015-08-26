@@ -1,0 +1,22 @@
+lcv_comment_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: LCVCommentBundle:Default:index }
+
+lcv_comment_show:
+    path:     show_comment
+    defaults: { _controller: LCVCommentBundle:Comment:show }
+
+lcv_comment_write:
+    path:     write_comment/{article_id}
+    defaults: { _controller: LCVCommentBundle:Comment:write }
+    requirements:
+        article_id: \d+
+
+lcv_comment_delete:
+    path:     delete_comment
+    defaults: { _controller: LCVCommentBundle:Comment:delete }
+
+lcv_comment_edit:
+    path:     edit_comment
+    defaults: { _controller: LCVCommentBundle:Comment:edit }
+

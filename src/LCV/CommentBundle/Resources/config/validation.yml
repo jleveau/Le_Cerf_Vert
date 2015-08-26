@@ -1,0 +1,4 @@
+#LCV\CommentBundle\Entity\Comment:
+#    properties:
+ #       text:
+ #           - NotBlank: ~

@@ -6,6 +6,7 @@ namespace LCV\PlatformBundle\Admin;
 use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Validator\ErrorElement;
 use Sonata\AdminBundle\Form\FormMapper;
 
 class ArticleAdmin extends Admin
@@ -16,7 +17,7 @@ class ArticleAdmin extends Admin
 		$formMapper
 		->add('title', 'text', array('label' => 'Titre de l\'article'))
 		->add('author', 'entity', array('class' => 'Application\Sonata\UserBundle\Entity\User'))
-		          ->add('content', 'ckeditor', array(
+		->add('content', 'ckeditor', array(
             'config' => array(
             	'contentsLangDirection' => 'fr',
             	'scayt_autoStartup' => true,
@@ -39,8 +40,10 @@ class ArticleAdmin extends Admin
            			     'items' => array('Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat'),
                     ),
                 )     
-             ),
-          )) //if no type is specified, SonataAdminBundle tries to guess it
+             )))
+          ->add('rate')
+          ->add('view')
+           //if no type is specified, SonataAdminBundle tries to guess it
           ->add('category', 'entity', array(
           		'class'    => 'LCVPlatformBundle:Category',
           		'property' => 'name'))

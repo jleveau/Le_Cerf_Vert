@@ -11,13 +11,19 @@
 	<div class="container">
 	    <div id="header" class="page-header">
 	      <h1>Les Articles</h1>
+	     {% for flashMessage in app.session.flashbag.get("success") %}
+	            <div class="alert alert-success">
+	                {{ flashMessage }}
+	            </div>
+	     {% endfor %}
 	    </div>
 	
 		    <div class="row">
 		      <div id="menu" class="col-md-2">
 		        <ul class="nav nav-pills nav-stacked">
-		          <li><a href="{{ path('lcv_platform_index') }}">Index des Articles</a></li>
 		          <li><a href="{{ path('lcv_platform_add') }}">Ajouter un article</a></li>
+		          <li><a href="{{ path('lcv_platform_index') }}">Catégories</a></li>
+		          <li><a href="{{ path('lcv_platform_list_articles') }}">Tous</a></li>
 		          
 		        </ul>
 		      </div>
@@ -37,7 +43,7 @@
 		     <p>{{ message }}</p>
 		   {% endfor %}
 	  </div>
-	
+	</div>
 	  {# On définit un sous-titre commun à toutes les pages du bundle, par exemple #}
 	  <hr>
 	

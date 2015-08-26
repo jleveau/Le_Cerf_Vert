@@ -10,10 +10,10 @@ lcv_platform_view:
         id: \d+
 
 lcv_platform_add:
-    path:      /add/{category_id}
-    defaults:  { _controller: LCVPlatformBundle:Article:add, category_id: 0 }
+    path:      /add/{categoryId}
+    defaults:  { _controller: LCVPlatformBundle:Article:add,categoryId: 0 }
     requirements:
-        category_id: \d*
+        categoryId: \d*
 
 lcv_platform_edit:
     path:      /edit/{id}
@@ -34,3 +34,9 @@ lcv_platform_accueil:
 lcv_platform_list_articles:
     path:      /list_articles
     defaults:  { _controller: LCVPlatformBundle:Article:list }
+    
+lcv_platform_delete_category:
+    path:      /index/{id}
+    defaults:  { _controller: LCVPlatformBundle:Article:deleteCategory}
+    requirements:
+        id: \d+

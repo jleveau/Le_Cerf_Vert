@@ -14,9 +14,7 @@ class NewsRepository extends EntityRepository
 {
 	public function getNews(){
 		$query = $this->createQueryBuilder('n')
-		->join('n.content','c')
-		->addSelect('c')
-    	->orderBy('c.id','DESC')
+    	->orderBy('n.id','DESC')
     	->getQuery();
     
     	return $query->getResult();

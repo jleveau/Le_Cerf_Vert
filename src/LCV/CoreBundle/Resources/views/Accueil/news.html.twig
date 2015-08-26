@@ -2,14 +2,11 @@
 {% for news in list_news %}
 		<div class="panel panel-primary">
 		  <div class="panel-heading">
-		  	  {{ render(controller("LCVCoreBundle:Accueil:news_header", {'content_id': news.content.id,'type': news.content.type })) }}
+		  	  {{ render(controller("LCVCoreBundle:Accueil:newsHeader", {'news_id': news.id })) }}
 		  
-		  {%  if news.content.type == "article" %}
-		  {%  endif %}
-
 		  </div>
 		  <div class="panel-body">
-		    {{news.content.abstract | raw}}
+		    {{news.abstract | raw}}
 		  </div>
 		</div>
   {% endfor %}

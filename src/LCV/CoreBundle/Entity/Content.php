@@ -27,36 +27,11 @@ class Content
      */
     private $id;
     
-    /**
-     * @var string
-     * @ORM\Column(name="type", type="string", length=255)
-     */
-    private $type;
-    
-    /**
-     * @var string
-     * @ORM\Column(name="abstract", type="string", length=255)
-     */
-	private $abstract;
+
         
     
     ////////////
-     /**
-     * @ORM\PreUpdate
-     */
-    public function updateDate() {
-        $this -> setUpdatedAt(new \DateTime());
-    }
     
-    public function createAbstract($s){
-        $abstract = substr($s,0,-255);
-        if (!$abstract){
-            $this->setAbstract($s);
-        }
-        else{
-            $this->setAbstract($abstract . "...");
-        }
-    }
     
     ///////////
     

@@ -49,8 +49,11 @@
 		"braincrafted/bootstrap-bundle": "~2.0",
 		"twbs/bootstrap": "3.2.*",
 		"jquery/jquery":   "1.11.1",
-		"oyejorge/less.php": "~1.5"
-
+		"oyejorge/less.php": "~1.5",
+		"knplabs/knp-menu": "~1.1",
+        "damianociarla/rating-bundle": "^1.2",
+        "kartik-v/bootstrap-star-rating": "@dev",
+        "coresphere/console-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

@@ -9,8 +9,10 @@
 	        <th data-sort="string">Titre</th>
 	        <th data-sort="string">Auteur</th>
 	        <th data-sort="string">Categorie</th>
+	         <th data-sort="string"> Date écriture</th>
 	        <th data-sort="string"> Dernière modification</th>
-	        <th data-sort="string"> Date écriture</th>
+	        <th data-sort="string"> Vues </th>
+	        <th data-sort="string"> Note </th>
 	      </tr>
 	    </thead>
 	    <tbody>
@@ -20,8 +22,10 @@
 	        <td> <a href="{{ path('lcv_platform_view', {'id': article.id}) }}">{{ article.title }} </a> </td>
 	        <td> {{ article.author.username }} </td>
 	        <td> {{ article.category.name }} </td>
-	        <td> {{ article.updatedAt.format('d/m/Y') }} </td>
 	        <td> {{ article.date.format('d/m/Y') }} </td>
+	        <td> {{ article.updatedAt.format('d/m/Y') }} </td>
+	         <td> {{ article.view }} </td>
+	        <td><input type="number" class="rating" min=0 max=5 value={{ article.rate.rate }} step=1 data-size="xxs" ></td>
 	      </tr>
 	    {% endfor %}
 	
