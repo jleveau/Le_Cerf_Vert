@@ -8,6 +8,6 @@ services:
         
     lcv_platform.beta.listener:
         class: LCV\PlatformBundle\Beta\BetaListener
-        arguments: [@lcv_platform.beta.html, "2015-08-30"]
+        arguments: [@lcv_platform.beta.html, "2015-09-30"]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: processBeta }

@@ -20,7 +20,6 @@ class AccueilController extends Controller {
     public function newsHeaderAction($news_id) {        
         $em = $this -> getDoctrine();
         $news= $em -> getRepository('LCVCoreBundle:News') -> find($news_id);
-        
         switch ($news->getType()) {
             case 'article' :
                      $article = $em -> getRepository('LCVPlatformBundle:Article') -> find($news->getArticle());

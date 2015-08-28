@@ -16,7 +16,7 @@ use LCV\CoreBundle\Entity\Rating;
  *
  * @ORM\Table(name="lcv_article")
  * @ORM\Entity(repositoryClass="LCV\PlatformBundle\Entity\ArticleRepository")
- * @ORM\HasLifeCycleCallbacks()
+ * @ORM\HasLifecycleCallbacks()
  * @UniqueEntity("title")
  */
 class Article {

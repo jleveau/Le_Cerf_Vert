@@ -1,13 +1,12 @@
 {% if article == null %}
 	<h3 class="panel-title"> Article Supprimé </h3>
 {% else %}
-
 	<h3 class="panel-title">Nouvel Article : <a href="{{ path('lcv_platform_view', {'id': article.id}) }}"> <strong>{{article.title}} </strong></a>  - 
-	Ecrit le {{article.date|localizeddate('full', 'none')}} par  <strong>{{article.author}} </strong>
+	Ecrit le {{article.date|date("m/d/Y")}} par  <strong>{{article.author}} </strong>
 	
 	{% set difference = date(article.updatedAt).diff(date(article.date)) %}
 	{% if difference.s >= 30 %}
-		Modifié le {{article.updatedAt|localizeddate('full', 'none')}}
+		Modifié le {{article.updatedAt|date("m/d/Y")}}
 	{% endif %}
 	</h3>
 {% endif %}

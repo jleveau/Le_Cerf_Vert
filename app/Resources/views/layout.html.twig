@@ -56,7 +56,7 @@
 
 <body>
 	<nav class="navbar navbar-inverse navbar-fixed-top">
-	  <div class="container-fluid">
+	  <div class="container">
 	    <div class="navbar-header">
 	      <a class="navbar-brand" href="{{ path('_accueil') }}">Le-Cerf-Vert</a>
 	    </div>
@@ -94,16 +94,16 @@
 	  </div>
 	</nav>
 	<div class="row">
-	    <div class="col-md-1">
+	    <div class="col-lg-1">
     		<img  src="{{ asset('logo.png') }}" class="img-circle" />
     		<hr>
     		{{ render(controller('ApplicationSonataUserBundle:User:whoIsOnline')) }}
 	    </div>
-	     <div class="col-md-9">
+	     <div class="col-lg-9">
 			{% block body %}
 			{% endblock %} <!--  End Block Body -->
 		</div>
-		<div class="col-md-2">
+		<div class="col-lg-2">
 		
 				{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
 		

@@ -43,7 +43,8 @@ class ProfileType extends AbstractType
 
             ->add('avatar', 'sonata_media_type', array(
                  'provider' => 'sonata.media.provider.image',
-                 'context'  => 'profile'
+                 'context'  => 'profile',
+                 'required' => false
             ))
             ->add('firstname', null, array(
                 'label'    => 'form.label_firstname',
