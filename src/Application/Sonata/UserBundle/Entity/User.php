@@ -27,6 +27,12 @@ class User extends BaseUser {
      */
     protected $articles;
     
+     /**
+     * @ORM\OneToMany(targetEntity="LCV\PlaylistBundle\Entity\Playlist", mappedBy="author")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $playlists;
+    
         /**
      * @ORM\OneToMany(targetEntity="LCV\CommentBundle\Entity\Comment", mappedBy="author", cascade={"remove"})
      * @ORM\JoinColumn(nullable=false)
@@ -247,5 +253,39 @@ class User extends BaseUser {
     public function getInvitation()
     {
         return $this->invitation;
+    }
+
+    /**
+     * Add playlists
+     *
+     * @param \LCV\PlaylistBundle\Entity\Playlist $playlists
+     * @return User
+     */
+    public function addPlaylist(\LCV\PlaylistBundle\Entity\Playlist $playlists)
+    {
+        $this->playlists[] = $playlists;
+        $playlists->setAuthor($this);
+
+        return $this;
+    }
+
+    /**
+     * Remove playlists
+     *
+     * @param \LCV\PlaylistBundle\Entity\Playlist $playlists
+     */
+    public function removePlaylist(\LCV\PlaylistBundle\Entity\Playlist $playlists)
+    {
+        $this->playlists->removeElement($playlists);
+    }
+
+    /**
+     * Get playlists
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlaylists()
+    {
+        return $this->playlists;
     }
 }

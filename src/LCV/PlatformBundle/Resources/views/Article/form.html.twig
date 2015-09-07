@@ -10,7 +10,7 @@
 {% form_theme form _self %}
 
 			
-<div class="well row">
+<div class="well">
     {# Les erreurs générales du formulaire. #}
        {{ form_start(form) }}
     
@@ -18,23 +18,23 @@
 
 	
 
-      <div class="form-group col-xs-2>
+      <div class="form-group">
 	      {# Génération du label. #}
-	      {{ form_label(form.title, "Titre de l'article", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	      {{ form_label(form.title, "Titre de l'article") }}
 	      {{ form_errors(form.title) }}
 	        {# Génération de l'input. #}
 	      {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
       </div>
 
-	  <div class="form-group col-xs-2>
+	  <div class="form-group">
 	      {# Idem pour un autre champ. #}
-	      {{ form_label(form.content, "Contenu de l'article", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+	      {{ form_label(form.content, "Contenu de l'article") }}
 	      {{ form_errors(form.content) }}
 	      {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
       </div>
     
-      <div class="form-group col-xs-2>
-	      {{ form_label(form.category, "Categorie", {'label_attr': {'class': 'col-sm-3 control-label'}}) }}
+      <div class="form-group">
+	      {{ form_label(form.category, "Categorie") }}
 	      {{ form_errors(form.category) }}
 	      {{ form_widget(form.category, {'attr': {'class': 'form-control'}}) }}
       </div>

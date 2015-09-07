@@ -33,7 +33,11 @@ class ArticleRepository extends EntityRepository {
     public function findByAuthorAndDate($author, $year) {
         $qb = $this -> createQueryBuilder('a');
 
-        $qb -> where('a.author = :author') -> setParameter('author', $author) -> andWhere('a.date < :year') -> setParameter('year', $year) -> orderBy('a.date', 'DESC');
+        $qb -> where('a.author = :author') 
+        -> setParameter('author', $author) 
+        -> andWhere('a.date < :year') 
+        -> setParameter('year', $year) 
+        -> orderBy('a.date', 'DESC');
 
         return $qb -> getQuery() -> getResult();
     }

@@ -1,0 +1,31 @@
+lcv_playlist_upload:
+    path:     /upload
+    defaults: { _controller: LCVPlaylistBundle:Playlist:upload}
+    
+lcv_playlist_view:
+    path:     /view
+    defaults: { _controller: LCVPlaylistBundle:Playlist:view }
+
+lcv_playlist_add:
+    path:     /add/{categoryId}
+    defaults: { _controller: LCVPlaylistBundle:Playlist:add,categoryId: 0 }
+    requirements:
+        categoryId: \d*
+
+lcv_playlist_delete:
+    path:     /delete
+    defaults: { _controller: LCVPlaylistBundle:Playlist:delete }
+
+lcv_playlist_edit:
+    path:     /edit/{playlist_id}
+    defaults: { _controller: LCVPlaylistBundle:Playlist:edit}
+    requirements:
+        categoryId: \d+
+        
+lcv_playlist_index:
+    path:     /index
+    defaults: { _controller: LCVPlaylistBundle:Playlist:index }
+
+lcv_playlist_list:
+    path:     /list
+    defaults: { _controller: LCVPlaylistBundle:Playlist:index }

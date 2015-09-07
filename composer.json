@@ -53,7 +53,8 @@
 		"knplabs/knp-menu": "~1.1",
         "damianociarla/rating-bundle": "^1.2",
         "kartik-v/bootstrap-star-rating": "@dev",
-        "coresphere/console-bundle": "dev-master"
+        "coresphere/console-bundle": "dev-master",
+        "punkave/symfony2-file-uploader-bundle": "dev-master"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

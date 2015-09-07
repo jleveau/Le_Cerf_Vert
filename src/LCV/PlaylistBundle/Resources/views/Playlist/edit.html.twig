@@ -1,0 +1,87 @@
+{% extends "LCVPlaylistBundle::layout.html.twig" %}
+
+{% block lcvplaylist_body %}
+
+  <h2>{{playlist.title}}</h2>
+  <hr>
+       
+    <form id="playlist_form" class="edit-form" action="{{ path('lcv_playlist_edit', { playlist_id: playlist.id}) }}" method="post" {{ form_enctype(form) }}>
+
+       {{ form_errors(form) }}
+
+       <div class="form-group">
+	      {{ form_label(form.title) }}
+  		   {{ form_errors(form.title) }}
+   		   {{ form_widget(form.title) }}
+       </div>
+       
+       <div class="form-group">
+	      {{ form_label(form.category) }}
+	      {{ form_errors(form.category) }}
+	 	  {{ form_widget(form.category) }}
+ 	   </div>
+ 	   
+ 	   {{ form_widget(form.save) }}	
+ 	   <hr>
+ 	   <table id="playlist_table" class="table table-striped sortable" data-prototype=" {% filter escape %} {{ include("LCVPlaylistBundle:Playlist:audio_file_prototype.html.twig") }}{% endfilter %} ">
+	 	   <thead>
+	 	   		<tr>
+	 	   			<th></th>
+	 	   			<th>Titre</th>
+	 	   			<th>Fichier</th>
+	 	   			<th>Actions</th>
+	 	   		</tr>
+	 	   </thead>
+	 	   
+	 	   {% for playlist_audio in form.playlist_audios %}
+		 	 	   {% set var = playlist_audio.vars.value %}
+		 	 	   <tbody>
+			 	   		<tr class="audio_row edit ">
+							  <td class="sorter col-md-1">
+							  	<div class="hidden order">
+				 	   			  {{ form_errors(playlist_audio.sortOrder) }}			      
+							 	  {{ form_widget(playlist_audio.sortOrder) }}
+							 	 </div>
+							  </td>
+			 	   			  <th class="col-md-3">
+				 	   			  {{ form_errors(playlist_audio.title) }}			      
+							 	  {{ form_widget(playlist_audio.title) }}
+							  </th>
+							  <td class="col-md-6">
+				 	   			  {{ form_errors(playlist_audio.audio.file) }}			      
+							 	  {{ form_widget(playlist_audio.audio.file) }}
+							  </td>
+							  <td class="action_buttons"></td>
+						 	</th>
+			 	   		</tr>
+			 	   		
+			 	   		<tr class="audio_row view">
+			 	   			<td class="sorter col-md-1"></td>
+			 	   			<th class="col-md-3">{{playlist_audio.vars.value.title }}</th>
+						 	<td class="col-md-6"> {{playlist_audio.audio.vars.value.name }}</td>
+						 	<td class="action_buttons"></td>
+			 	 	    </tr>
+			 	 </tbody>
+		 	 {% endfor %}
+		 	 
+
+	    </table>
+
+      	<div style="cursor:pointer" id="add_tag_link" class="alert alert-success">
+		<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Ajouter un Morceau sur la Playlist</div>
+      	{{ form_rest(form) }}
+</form>
+
+	<style>
+
+	  
+		.sorter {
+			
+		    cursor: ns-resize;
+		    width: 20px;
+		}
+	
+	</style>
+
+
+{% endblock %}

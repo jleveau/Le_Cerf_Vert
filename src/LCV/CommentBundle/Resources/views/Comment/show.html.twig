@@ -10,12 +10,53 @@
 	   </a>
 	   
    		<div class="media-body">
-   		<h4 class="media-heading">{{comment.author}}  <small> - Le {{comment.date|date("m/d/Y \à H:m:s")}}</small></h4>
-   		{{ comment.content}}
-   		   		</div>
-   		
-   		
-    </div>
+	   		<h4 class="media-heading">{{comment.author}}  <small> - Le {{comment.date|date("m/d/Y \à H:m:s")}}
+	   								 {% if comment.author.id == user_id %} 
+	   								 	<a id="edit_{{comment.id}}" onclick="hideComment({{comment.id}});">éditer</a> 
+	   								 	<a href="{{ path('lcv_comment_delete',{'comment_id':comment.id})}}">supprimer</a> 
+	   								 {% endif %}
+	   													</small>
+	   		</h4>
+	   		<div class="content_{{comment.id}}">
+	   		{{ comment.content}}
+	   		</div>
+	   		
+	   		{% set id = comment.id %}
+		    {% set form = forms[id] %}
+		    <div style="display: none" class="form_{{comment.id}}">
+			    <form action="{{ path('lcv_comment_view',{'article_id':article_id}) }}" method="post" {{ form_enctype(form) }}>
+			    {{ form_start(form, {'attr': {'class': 'forms-horizontal'}}) }}
+			    {{ form_errors(form) }}
+			    
+			 	<div class="forms-group">
+					{{ form_label(form.content,' ') }}
+				    {{ form_errors(form.content) }}
+				    {{ form_widget(form.content) }}
+			    </div>
+			    
+			     {{ form_widget(form.save,{ 'label': "Editer" } ) }}
+			    
+				 {{ form_rest(form) }}
+			 
+				 {{ form_end(form) }}
+				 </div>
+   			</div>
+      </div>
+    <script type="text/javascript">
+		<!-- afficher/cacher formulaire//-->
+		function hideComment(id_comment) {
+				$('.content_'+id_comment).hide();
+				$('.form_'+id_comment).show();
+				$('#edit_'+id_comment).attr("onclick","showComment("+id_comment+")");
+	        };
+	    function showComment(id_comment){
+	    	$('.content_'+id_comment).show();
+			$('.form_'+id_comment).hide();
+			$('#edit_'+id_comment).attr("onclick","hideComment("+id_comment+")");
+		   }
+
+	 
+	</script>
 
   {% endfor %}
   

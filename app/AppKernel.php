@@ -51,6 +51,9 @@ class AppKernel extends Kernel
 
             new LCV\CommentBundle\LCVCommentBundle(),
             new CoreSphere\ConsoleBundle\CoreSphereConsoleBundle(),
+            new LCV\PlaylistBundle\LCVPlaylistBundle(),
+            
+            new PunkAve\FileUploaderBundle\PunkAveFileUploaderBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

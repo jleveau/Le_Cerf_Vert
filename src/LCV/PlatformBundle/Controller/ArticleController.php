@@ -173,10 +173,7 @@ class ArticleController extends Controller {
 
             return $this -> redirect($this -> generateUrl('lcv_platform_view', array('id' => $article -> getId())));
         }
-
-        return $this -> render('LCVPlatformBundle:Article:edit.html.twig', array('form' => $form -> createView(), 'article' => $article // Je passe également l'article à la vue si jamais elle veut l'afficher
-        ));
-        return $this -> render('LCVPlatformBundle:Article:edit.html.twig', array('article' => $article));
+        return $this -> render('LCVPlatformBundle:Article:edit.html.twig', array('form' => $form -> createView(), 'article' => $article));
     }
 
     public function deleteAction($id, Request $request) {

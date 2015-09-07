@@ -1,0 +1,35 @@
+
+<h3>{%  if playlist.title is not null %} 
+			{{playlist.title}}
+	{% else %}
+			Nouvelle Playlist 
+	{% endif %}
+	- {{form.vars.value.category.name}} 
+	</h3>
+			
+{% form_theme form _self %}
+
+			
+<hr>
+    {# Les erreurs générales du formulaire. #}
+    
+       <form action="{{ path('lcv_playlist_add') }}" method="post" {{ form_enctype(form) }}>
+			            {{ form_errors(form) }}
+			
+			       <div class="form-group">
+				      {{ form_label(form.title) }}
+				      {{ form_errors(form.title) }}
+				      {{ form_widget(form.title) }}
+			       </div>
+			       <div class="form-group">
+				      {{ form_label(form.category) }}
+				      {{ form_errors(form.category) }}
+					 {{ form_widget(form.category) }}
+ 			       </div>
+ 			 {{ form_widget(form.save) }}
+			
+			      			{{ form_rest(form) }}
+			
+
+       </form>
+

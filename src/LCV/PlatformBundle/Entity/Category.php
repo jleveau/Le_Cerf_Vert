@@ -23,7 +23,7 @@ class Category {
      */
     private $name;
     
-        /**
+     /**
      * @ORM\Column(name="ramovable", type="boolean")
      */
     private $removable;

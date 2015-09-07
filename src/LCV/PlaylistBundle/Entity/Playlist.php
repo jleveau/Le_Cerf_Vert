@@ -1,0 +1,298 @@
+<?php
+
+namespace LCV\PlaylistBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * Playlist
+ *
+ * @ORM\Table(name="lcv_playlist")
+ * @ORM\Entity(repositoryClass="LCV\PlaylistBundle\Entity\PlaylistRepository")
+ * @ORM\HasLifecycleCallbacks()
+ * @UniqueEntity("title")
+ */
+class Playlist {
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime")
+     */
+    private $date;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=255)
+     */
+    private $title;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updatedAt", type="datetime")
+     */
+    private $updatedAt;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="views", type="integer",options={"default" = 0})
+     */
+    private $views;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="LCV\PlaylistBundle\Entity\PlaylistCategory", inversedBy="playlists")
+     */
+    private $category;
+
+    /**
+     * @ORM\OneToMany(targetEntity="LCV\CommentBundle\Entity\Comment", mappedBy="playlist", cascade={"remove"})
+     */
+    private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="LCV\PlaylistBundle\Entity\PlaylistAudio", mappedBy="playlist", cascade={"persist","remove"}, orphanRemoval=true)
+     * @Assert\Valid
+     * */
+    private $playlist_audios;
+    
+     /**
+     * @var Application\Sonata\UserBundle\Entity\User
+     *
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="playlists" )
+     */
+    private $author;
+
+    /////
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function updateDate() {
+        $this -> setUpdatedAt(new \DateTime());
+    }
+
+    public function __construct() {
+        $this -> date = new \DateTime();
+        $this -> updatedAt = $this -> date;
+        $this -> views = 0;
+        $this -> comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this -> playlist_audios = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    ////
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId() {
+        return $this -> id;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     * @return Playlist
+     */
+    public function setDate($date) {
+        $this -> date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate() {
+        return $this -> date;
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return Playlist
+     */
+    public function setTitle($title) {
+        $this -> title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle() {
+        return $this -> title;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return Playlist
+     */
+    public function setUpdatedAt($updatedAt) {
+        $this -> updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt() {
+        return $this -> updatedAt;
+    }
+
+    /**
+     * Set views
+     *
+     * @param integer $views
+     * @return Playlist
+     */
+    public function setViews($views) {
+        $this -> views = $views;
+
+        return $this;
+    }
+
+    /**
+     * Get views
+     *
+     * @return integer
+     */
+    public function getViews() {
+        return $this -> views;
+    }
+
+    /**
+     * Set category
+     *
+     * @param \LCV\PlaylistBundle\Entity\PlaylistCategory $category
+     * @return Playlist
+     */
+    public function setCategory(\LCV\PlaylistBundle\Entity\PlaylistCategory $category = null) {
+        $this -> category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \LCV\PlaylistBundle\Entity\PlaylistCategory
+     */
+    public function getCategory() {
+        return $this -> category;
+    }
+
+    /**
+     * Add comments
+     *
+     * @param \LCV\CommentBundle\Entity\Comment $comments
+     * @return Playlist
+     */
+    public function addComment(\LCV\CommentBundle\Entity\Comment $comments) {
+        $this -> comments[] = $comments;
+        $comments -> setPlaylist = $this;
+        return $this;
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \LCV\CommentBundle\Entity\Comment $comments
+     */
+    public function removeComment(\LCV\CommentBundle\Entity\Comment $comments) {
+        $this -> comments -> removeElement($comments);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments() {
+        return $this -> comments;
+    }
+
+    /**
+     * Set author
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $author
+     * @return Playlist
+     */
+    public function setAuthor(\Application\Sonata\UserBundle\Entity\User $author = null)
+    {
+        $this->author = $author;
+
+        return $this;
+    }
+
+    /**
+     * Get author
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User 
+     */
+    public function getAuthor()
+    {
+        return $this->author;
+    }
+
+   
+
+    /**
+     * Add playlist_audios
+     *
+     * @param \LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios
+     * @return Playlist
+     */
+    public function addPlaylistAudio(\LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios)
+    {
+        $this->playlist_audios[] = $playlistAudios;
+        $playlistAudios->setPlaylist($this);
+        return $this;
+    }
+
+    /**
+     * Remove playlist_audios
+     *
+     * @param \LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios
+     */
+    public function removePlaylistAudio(\LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios)
+    {
+        $this->playlist_audios->removeElement($playlistAudios);
+    }
+
+    /**
+     * Get playlist_audios
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlaylistAudios()
+    {
+        return $this->playlist_audios;
+    }
+}

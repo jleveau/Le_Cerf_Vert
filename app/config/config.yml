@@ -9,6 +9,7 @@ imports:
     - { resource: @ApplicationSonataUserBundle/Resources/config/services.yml }
     - { resource: @ApplicationSonataUserBundle/Resources/config/admin.yml }
     - { resource: @LCVCommentBundle/Resources/config/admin.yml }
+    - { resource: @LCVPlaylistBundle/Resources/config/admin.yml }
     
 
 # Put parameters here that don't need to change on each machine where the app is deployed
@@ -90,7 +91,8 @@ doctrine:
                     FOSUserBundle: ~
                     ApplicationSonataUserBundle: 
                         type: annotation
-                    SonataMediaBundle: ~
+                    ApplicationSonataMediaBundle:
+                        type: annotation
                     LCVPlatformBundle: ~
                 
 # Swiftmailer Configuration
@@ -179,10 +181,10 @@ sonata_admin:
         
 sonata_media:
     # if you don't use default namespace configuration
-    #class:
-    #    media: MyVendor\MediaBundle\Entity\Media
-    #    gallery: MyVendor\MediaBundle\Entity\Gallery
-    #    gallery_has_media: MyVendor\MediaBundle\Entity\GalleryHasMedia
+    class:
+        media: Application\Sonata\MediaBundle\Entity\Media
+        gallery: Application\Sonata\MediaBundle\Entity\Gallery
+        gallery_has_media: Application\Sonata\MediaBundle\Entity\GalleryHasMedia
     default_context: default
     db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr
     contexts:

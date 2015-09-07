@@ -1,0 +1,11 @@
+{# src/LCV/PlatformBundle/Resources/views/Article/menu.html.twig #}
+
+<ul class="nav nav-pills nav-stacked">
+  {% for playlist in listPlaylist %}
+    <li>
+      <a href="{{ path('lcv_playlist_view', {'id': playlist.id}) }}">
+        {{ playlist.title }}
+      </a>
+    </li>
+  {% endfor %}
+</ul>

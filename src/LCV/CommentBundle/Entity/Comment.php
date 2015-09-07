@@ -55,6 +55,12 @@ class Comment
      */
     private $article;
     
+        /**
+     * @ORM\ManyToOne(targetEntity="LCV\PlaylistBundle\Entity\Playlist" , inversedBy="comments")
+     * @ORM\JoinColumn(name="playlist_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $playlist;
+    
 ///////////////////////////
 
     public function __construct() {
@@ -64,7 +70,10 @@ class Comment
     public function __toString() {
         return $this -> article.$this->id;
     }
-    
+
+    public function updateDate() {
+        $this -> setUpdatedAt(new \DateTime());
+    }
     
     //////////////////
     /**
@@ -193,4 +202,27 @@ class Comment
         return $this->content;
     }
     
+
+    /**
+     * Set playlist
+     *
+     * @param \LCV\PlaylistBundle\Entity\Playlist $playlist
+     * @return Comment
+     */
+    public function setPlaylist(\LCV\PlaylistBundle\Entity\Playlist $playlist = null)
+    {
+        $this->playlist = $playlist;
+
+        return $this;
+    }
+
+    /**
+     * Get playlist
+     *
+     * @return \LCV\PlaylistBundle\Entity\Playlist 
+     */
+    public function getPlaylist()
+    {
+        return $this->playlist;
+    }
 }

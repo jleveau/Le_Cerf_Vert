@@ -1,0 +1,24 @@
+services:
+    sonata.admin.playlist_category:
+        class: LCV\PlaylistBundle\Admin\PlaylistCategoryAdmin
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: Playlists
+              label: Category
+        arguments:
+            - ~
+            - LCV\PlaylistBundle\Entity\PlaylistCategory
+            - ~
+            
+    sonata.admin.playlist:
+        class: LCV\PlaylistBundle\Admin\PlaylistAdmin
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: Playlists
+              label: Playlist
+        arguments:
+            - ~
+            - LCV\PlaylistBundle\Entity\Playlist
+            - ~   

@@ -1,3 +1,7 @@
+lcv_playlist:
+    resource: "@LCVPlaylistBundle/Resources/config/routing.yml"
+    prefix:   /playlist
+
 _console:
     resource: "@CoreSphereConsoleBundle/Resources/config/routing.yml"
     prefix: /_console
@@ -16,7 +20,7 @@ lcv_core:
 
 lcv_platform:
     resource: "@LCVPlatformBundle/Resources/config/routing.yml"
-    prefix:   /platform
+    prefix:   /article
     
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

@@ -51,14 +51,28 @@ class Comment
     
     /**
      * @ORM\ManyToOne(targetEntity="LCV\PlatformBundle\Entity\Article" , inversedBy="comments")
+     * @ORM\JoinColumn(name="article_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $article;
+    
+        /**
+     * @ORM\ManyToOne(targetEntity="LCV\PlaylistBundle\Entity\Playlist" , inversedBy="comments")
+     * @ORM\JoinColumn(name="playlist_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    private $playlist;
     
 ///////////////////////////
 
     public function __construct() {
         $this -> date = new \DateTime();
         $this -> updatedAt = $this -> date;
+    }
+    public function __toString() {
+        return $this -> article.$this->id;
+    }
+
+    public function updateDate() {
+        $this -> setUpdatedAt(new \DateTime());
     }
     
     //////////////////
@@ -164,4 +178,28 @@ class Comment
     {
         return $this->article;
     }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     * @return Comment
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string 
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
+    
 }

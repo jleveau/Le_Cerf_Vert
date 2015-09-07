@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Registry xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Settings>
+    <Audio>
+      <AudioCategory>
+        <Master>
+          <Volume>1</Volume>
+          <Mute>False</Mute>
+        </Master>
+        <Ambiance>
+          <Volume>1</Volume>
+          <Mute>False</Mute>
+        </Ambiance>
+        <GUI>
+          <Volume>1</Volume>
+          <Mute>False</Mute>
+        </GUI>
+        <Music>
+          <Volume>1</Volume>
+          <Mute>False</Mute>
+          <IntervalDurationRatio>0.5</IntervalDurationRatio>
+        </Music>
+        <SFX>
+          <Volume>1</Volume>
+          <Mute>False</Mute>
+        </SFX>
+      </AudioCategory>
+    </Audio>
+    <Misc>
+      <TutorialAlreadyDisplayed>Y</TutorialAlreadyDisplayed>
+    </Misc>
+  </Settings>
+</Registry>
