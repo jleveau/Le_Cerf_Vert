@@ -1,0 +1,12 @@
+{% if playlist == null %}
+	<h3 class="panel-title"> playlist Supprimé </h3>
+{% else %}
+	<h3 class="panel-title">Nouvelle Playlist : <a href="{{ path('lcv_playlist_view', {'playlist_id': playlist.id}) }}"> <strong>{{playlist.title}} </strong></a>  - 
+	Postée le {{playlist.date|date("m/d/Y")}} par  <strong>{{playlist.author}} </strong>
+	
+	{% set difference = date(playlist.updatedAt).diff(date(playlist.date)) %}
+	{% if difference.s >= 30 %}
+		Modifiée le {{playlist.updatedAt|date("m/d/Y")}}
+	{% endif %}
+	</h3>
+{% endif %}

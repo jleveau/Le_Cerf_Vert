@@ -22,9 +22,11 @@ class AccueilController extends Controller {
         $news= $em -> getRepository('LCVCoreBundle:News') -> find($news_id);
         switch ($news->getType()) {
             case 'article' :
-                     $article = $em -> getRepository('LCVPlatformBundle:Article') -> find($news->getArticle());
+                $article = $em -> getRepository('LCVPlatformBundle:Article') -> find($news->getArticle());
                 return $this -> render('LCVCoreBundle:Accueil:news_article_header.html.twig', array('article' => $article));
-
+            case 'playlist':
+                $playlist= $em -> getRepository('LCVPlaylistBundle:Playlist') -> find($news->getPlaylist());
+                return $this -> render('LCVCoreBundle:Accueil:news_playlist_header.html.twig', array('playlist' => $playlist));
             default :
                 $value = null;
                 break;

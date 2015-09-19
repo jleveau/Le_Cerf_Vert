@@ -3,13 +3,16 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: sonata_core.yml }
-    - { resource: @LCVPlatformBundle/Resources/config/admin.yml }
     - { resource: @LCVCoreBundle/Resources/config/admin.yml }
     - { resource: @LCVCoreBundle/Resources/config/services.yml }
     - { resource: @ApplicationSonataUserBundle/Resources/config/services.yml }
     - { resource: @ApplicationSonataUserBundle/Resources/config/admin.yml }
     - { resource: @LCVCommentBundle/Resources/config/admin.yml }
     - { resource: @LCVPlaylistBundle/Resources/config/admin.yml }
+    - { resource: @LCVPlatformBundle/Resources/config/admin.yml }
+    - { resource: @ApplicationSonataMediaBundle/Resources/config/config.yml }
+    - { resource: @LCVPlaylistBundle/Resources/config/services.yml }
+    
     
 
 # Put parameters here that don't need to change on each machine where the app is deployed
@@ -39,12 +42,21 @@ framework:
         handler_id:  ~
     fragments:       ~
     http_method_override: true
+    serializer:
+        enabled: true
 
 # Twig Configuration
 twig:
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
+    globals:
+        audioRootDir: %audioRootDir%
+    form:
+        resources:
+            # other files
+            - 'SonataMediaBundle:Form:media_widgets.html.twig'
 
+    
 # Assetic Configuration
 assetic:
     debug:          "%kernel.debug%"
@@ -94,7 +106,30 @@ doctrine:
                     ApplicationSonataMediaBundle:
                         type: annotation
                     LCVPlatformBundle: ~
-                
+                    gedmo_translatable:
+                        type: annotation
+                        prefix: Gedmo\Translatable\Entity
+                        dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translatable/Entity"
+                        alias: GedmoTranslatable # (optional) it will default to the name set for the mapping
+                        is_bundle: false
+                    gedmo_translator:
+                        type: annotation
+                        prefix: Gedmo\Translator\Entity
+                        dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Translator/Entity"
+                        alias: GedmoTranslator # (optional) it will default to the name set for the mapping
+                        is_bundle: false
+                    gedmo_loggable:
+                        type: annotation
+                        prefix: Gedmo\Loggable\Entity
+                        dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Loggable/Entity"
+                        alias: GedmoLoggable # (optional) it will default to the name set for the mappingmapping
+                        is_bundle: false
+                    gedmo_tree:
+                        type: annotation
+                        prefix: Gedmo\Tree\Entity
+                        dir: "%kernel.root_dir%/../vendor/gedmo/doctrine-extensions/lib/Gedmo/Tree/Entity"
+                        alias: GedmoTree # (optional) it will default to the name set for the mapping
+                        is_bundle: false
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -108,6 +143,7 @@ stof_doctrine_extensions:
     orm:
         default:
             sluggable: true
+            tree: true
             
 fos_user:
     db_driver:     orm                       # Le type de BDD à utiliser, nous utilisons l'ORM Doctrine depuis le début
@@ -144,7 +180,6 @@ ivory_ck_editor:
             filebrowserImageUploadRoute: admin_sonata_media_media_upload
             filebrowserImageUploadRouteParameters:
                 provider: sonata.media.provider.image
-            enterMode: CKEDITOR.ENTER_BR
 
             
         
@@ -179,41 +214,7 @@ sonata_admin:
             # display a dashboard block
             - { position: left, type: sonata.admin.block.admin_list }
         
-sonata_media:
-    # if you don't use default namespace configuration
-    class:
-        media: Application\Sonata\MediaBundle\Entity\Media
-        gallery: Application\Sonata\MediaBundle\Entity\Gallery
-        gallery_has_media: Application\Sonata\MediaBundle\Entity\GalleryHasMedia
-    default_context: default
-    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr
-    contexts:
-        default:  # the default context is mandatory
-            providers:
-                - sonata.media.provider.dailymotion
-                - sonata.media.provider.youtube
-                - sonata.media.provider.image
-                - sonata.media.provider.file
-    
-            formats:
-                small: { width: 100 , quality: 70}
-                big:   { width: 500 , quality: 70}
-                
-        profile:
-            providers:
-                - sonata.media.provider.image
-            formats:
-                small: { width: 100 , quality: 95}
-                big:   { width: 250 , quality: 90}
-            
-            
-    cdn:
-        server:
-            path: /Le_Cerf_Vert/web/uploads/media # http://media.sonata-project.org/
-    filesystem:
-        local:
-            directory:  %kernel.root_dir%/../web/uploads/media
-            create:     true
+
             
 sonata_doctrine_orm_admin:
     # default value is null, so doctrine uses the value defined in the configuration
@@ -268,9 +269,6 @@ sonata_user:
             validation_groups:  [Profile]
         # Profile show page is a dashboard as in SonataAdminBundle
 
-            
-         
-
 braincrafted_bootstrap:
     less_filter: lessphp
     output_dir:
@@ -279,11 +277,10 @@ braincrafted_bootstrap:
     less_filter: less # "less", "lessphp", "sass" or "none"
     fonts_dir: %kernel.root_dir%/../web/fonts
 
-twig:
-    debug:            %kernel.debug%
-    strict_variables: %kernel.debug%
 
-    form:
-        resources:
-            # other files
-            - 'SonataMediaBundle:Form:media_widgets.html.twig'
+            
+oneup_uploader:
+    mappings:
+        audio:
+            frontend: blueimp
+            enable_progress: true

@@ -1,12 +1,75 @@
-{# src/LCV/PlatformBundle/Resources/views/Article/add.html.twig #}
-
 {% extends "LCVPlaylistBundle::layout.html.twig" %}
 
-{% block lcvplatform_body %}
+{% block title %}
+  Lecture d'une Playlist - {{ parent() }}
+{% endblock %}
 
-  <h2>Ajouter un article</h2>
+{% block lcvplaylist_body %}
+	  <h2>{{ playlist.title }}</h2>
+	
+	  <p class="lead">Par {{ playlist.author }} </br>
+	  {% if not playlist.category == null %}
+	   Catégorie :
+	      {{ playlist.category.name }}
+	  {% endif %}
+	  </br>
+	  	 <small>  <span class="glyphicon glyphicon-time"> {{ playlist.date|date('d/m/Y') }}  </span> mis à jour le : <span class="glyphicon">{{ playlist.updatedAt|date('d/m/Y') }}</span></small> </br>
+		 <small>  <span class="glyphicon glyphicon-eye-open">  {{playlist.views}} </span></small></br>  
+	  
+	  	{{ form_start(form_vote, {'attr': {'class': 'form-inline'}}) }}
+	    {{ form_errors(form_vote) }}
+	    <div class="form-group">
+		{{ form_label(form_vote.value,'Note ('~rate.votes|length ~ ')') }}
+	    {{ form_errors(form_vote.value) }}
+	    {{ form_widget(form_vote.value) }}  
+	    </div>
+	    
+	    {{ form_widget(form_vote.save,{ 'label': "Voter" } ) }}
+		{{ form_rest(form_vote) }}
+		{{ form_end(form_vote) }}
+	  
+	  
+	    <hr>
+	
 
-  {{ include("LCVPlaylistBundle:Article:form.html.twig") }}
-
+	    {% if app.user ==  playlist.author%}
+		    <a href="{{ path('lcv_playlist_edit', {'playlist_id': playlist.id}) }}" class="btn btn-default">
+		      <i class="glyphicon glyphicon-edit"></i>
+		      Modifier la Playlist
+		    </a>
+		    <a href="{{ path('lcv_playlist_delete', {'playlist_id': playlist.id}) }}" class="btn btn-danger">
+		      <i class="glyphicon glyphicon-trash"></i>
+		      Supprimer la Playlist
+		    </a>
+	    {% endif %}
+	    
+	    
+	    <hr>
+	    <div class="row">
+		    <div class= "col-md-6 col-md-offset-2">
+			    {{ render(controller("LCVPlaylistBundle:Playlist:playlistPlayer", {'playlist_id': playlist.id })) }}
+		 	 </div>
+	 	</div>
+	    <hr>
+		<div class="well">
+		  <h4>Laisser un commentaire</h4>
+		    {{ form_start(form, {'attr': {'class': 'form-horizontal'}}) }}
+	    {{ form_errors(form) }}
+	    
+	 	<div class="form-group">
+			{{ form_label(form.content,' ') }}
+		    {{ form_errors(form.content) }}
+		    {{ form_widget(form.content) }}
+	    </div>
+	    
+	    {{ form_widget(form.save,{ 'label': "Enregistrer" } ) }}
+	    
+	 {{ form_rest(form) }}
+	 
+	 {{ form_end(form) }}
+	</div>
+	<hr>
+	
+	{{ render(controller("LCVCommentBundle:Comment:viewPlaylist", {'playlist_id': playlist.id })) }}
 
 {% endblock %}

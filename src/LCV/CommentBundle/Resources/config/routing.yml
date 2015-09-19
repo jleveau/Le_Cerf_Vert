@@ -2,9 +2,15 @@ lcv_comment_homepage:
     path:     /hello/{name}
     defaults: { _controller: LCVCommentBundle:Default:index }
 
-lcv_comment_view:
-    path:     /show_comment/{article_id}
-    defaults: { _controller: LCVCommentBundle:Comment:view }
+lcv_comment_view_article:
+    path:     /show_comment_article/{article_id}
+    defaults: { _controller: LCVCommentBundle:Comment:viewArticle }
+    requirements:
+        article_id: \d+
+        
+lcv_comment_view_playlist:
+    path:     /show_comment_playlist/{playlist_id}
+    defaults: { _controller: LCVCommentBundle:Comment:viewPlaylist }
     requirements:
         article_id: \d+
         

@@ -3,7 +3,7 @@
 <ul class="nav nav-pills nav-stacked">
   {% for playlist in listPlaylist %}
     <li>
-      <a href="{{ path('lcv_playlist_view', {'id': playlist.id}) }}">
+      <a href="{{ path('lcv_playlist_view', {'playlist_id': playlist.id}) }}">
         {{ playlist.title }}
       </a>
     </li>

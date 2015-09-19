@@ -26,9 +26,18 @@ class News
      * @var LCV\PlatformBundle\Entity\Article
      *
      * @ORM\OneToOne(targetEntity="LCV\PlatformBundle\Entity\Article", inversedBy="new")
+     * @ORM\JoinColumn(name="article_id", nullable=true)
      */
     private $article;
-
+    
+     /**
+     * @var LCV\PlaylistBundle\Entity\Playlist
+     *
+     * @ORM\OneToOne(targetEntity="LCV\PlaylistBundle\Entity\Playlist", inversedBy="new")
+     * @ORM\JoinColumn(name="playlist_id", nullable=true)
+     */
+    private $playlist;
+    
     /**
      * @var string
      * @ORM\Column(name="type", type="string", length=255)

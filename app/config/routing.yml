@@ -62,7 +62,9 @@ soanata_user:
     resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
     prefix: /admin
  
-
+oneup_uploader:
+    resource: .
+    type: uploader
  
  
 # error-prevention

@@ -19,3 +19,7 @@ services:
         scope: request
         public: false
         
+    sonata_media.twig.mediaUrlExtension:
+        class: Application\Sonata\MediaBundle\Twig\MediaUrlExtension
+        tags:
+            - { name: twig.extension }

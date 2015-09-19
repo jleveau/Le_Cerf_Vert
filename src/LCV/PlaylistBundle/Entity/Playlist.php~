@@ -4,6 +4,7 @@ namespace LCV\PlaylistBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Playlist
@@ -63,7 +64,8 @@ class Playlist {
 
     /**
      * @ORM\OneToMany(targetEntity="LCV\PlaylistBundle\Entity\PlaylistAudio", mappedBy="playlist", cascade={"persist","remove"}, orphanRemoval=true)
-     */
+     * @Assert\Valid
+     * */
     private $playlist_audios;
     
      /**
@@ -72,9 +74,28 @@ class Playlist {
      * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="playlists" )
      */
     private $author;
-
+    
+     /**
+     * @ORM\OneToMany(targetEntity="LCV\CoreBundle\Entity\Notification", mappedBy="playlist", cascade={"remove"})
+     */
+    private $notifications;
+    
+     /**
+     * @ORM\OneToOne(targetEntity="LCV\CoreBundle\Entity\Rating", cascade={"persist","remove"})
+     */
+    private $rate;
+    
+     /**
+     * @ORM\OneToOne(targetEntity="LCV\CoreBundle\Entity\News", mappedBy="playlist", orphanRemoval=true)
+     **/
+    private $new;
+    
     /////
-
+    public function incViews(){
+        $this->views=$this->views+1;
+    }
+    
+    
     /**
      * @ORM\PreUpdate
      */
@@ -87,7 +108,7 @@ class Playlist {
         $this -> updatedAt = $this -> date;
         $this -> views = 0;
         $this -> comments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this -> audio_files = new \Doctrine\Common\Collections\ArrayCollection();
+        $this -> playlist_audios = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     ////
@@ -214,7 +235,7 @@ class Playlist {
      */
     public function addComment(\LCV\CommentBundle\Entity\Comment $comments) {
         $this -> comments[] = $comments;
-        $comments -> setPlaylist = $this;
+        $comments -> setPlaylist($this);
         return $this;
     }
 
@@ -260,4 +281,93 @@ class Playlist {
     }
 
    
+
+    /**
+     * Add playlist_audios
+     *
+     * @param \LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios
+     * @return Playlist
+     */
+    public function addPlaylistAudio(\LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios)
+    {
+        $this->playlist_audios[] = $playlistAudios;
+        $playlistAudios->setPlaylist($this);
+        return $this;
+    }
+
+    /**
+     * Remove playlist_audios
+     *
+     * @param \LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios
+     */
+    public function removePlaylistAudio(\LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios)
+    {
+        $this->playlist_audios->removeElement($playlistAudios);
+    }
+
+    /**
+     * Get playlist_audios
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlaylistAudios()
+    {
+        return $this->playlist_audios;
+    }
+
+    /**
+     * Add notifications
+     *
+     * @param \LCV\CoreBundle\Entity\Notification $notifications
+     * @return Playlist
+     */
+    public function addNotification(\LCV\CoreBundle\Entity\Notification $notifications)
+    {
+        $this->notifications[] = $notifications;
+
+        return $this;
+    }
+
+    /**
+     * Remove notifications
+     *
+     * @param \LCV\CoreBundle\Entity\Notification $notifications
+     */
+    public function removeNotification(\LCV\CoreBundle\Entity\Notification $notifications)
+    {
+        $this->notifications->removeElement($notifications);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * Set rate
+     *
+     * @param \LCV\CoreBundle\Entity\Rating $rate
+     * @return Playlist
+     */
+    public function setRate(\LCV\CoreBundle\Entity\Rating $rate = null)
+    {
+        $this->rate = $rate;
+
+        return $this;
+    }
+
+    /**
+     * Get rate
+     *
+     * @return \LCV\CoreBundle\Entity\Rating 
+     */
+    public function getRate()
+    {
+        return $this->rate;
+    }
 }

@@ -51,6 +51,13 @@ class Notification
     private $type;
     
      /**
+     * @var LCV\PlaylistBundle\Entity\Playlist
+     *
+     * @ORM\ManyToOne(targetEntity="LCV\PlaylistBundle\Entity\Playlist", inversedBy="notifications")
+     */
+    private $playlist;
+    
+     /**
      * @var LCV\PlatformBundle\Entity\Article
      *
      * @ORM\ManyToOne(targetEntity="LCV\PlatformBundle\Entity\Article", inversedBy="notifications")
@@ -186,5 +193,28 @@ class Notification
     public function getArticle()
     {
         return $this->article;
+    }
+
+    /**
+     * Set playlist
+     *
+     * @param \LCV\PlaylistBundle\Entity\Playlist $playlist
+     * @return Notification
+     */
+    public function setPlaylist(\LCV\PlaylistBundle\Entity\Playlist $playlist = null)
+    {
+        $this->playlist = $playlist;
+
+        return $this;
+    }
+
+    /**
+     * Get playlist
+     *
+     * @return \LCV\PlaylistBundle\Entity\Playlist 
+     */
+    public function getPlaylist()
+    {
+        return $this->playlist;
     }
 }

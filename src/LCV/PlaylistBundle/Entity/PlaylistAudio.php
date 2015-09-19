@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * PlaylistAudio
  *
  * @ORM\Table(name="lcv_playlistaudio")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="LCV\PlaylistBundle\Entity\PlaylistAudioRepository")
  */
 class PlaylistAudio
 {
@@ -29,10 +29,15 @@ class PlaylistAudio
     
      /**
      * 
-     *@Assert\Valid()
      * @ORM\ManyToOne(targetEntity="LCV\PlaylistBundle\Entity\AudioFile", inversedBy="playlist_audios", cascade={"persist"})
      */
     private $audio;
+    
+     /**
+     * @ORM\OneToOne(targetEntity="Application\Sonata\MediaBundle\Entity\Media", cascade={"remove","persist"})
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $image;
 
     /**
      * @var integer
@@ -149,5 +154,28 @@ class PlaylistAudio
     public function getTitle()
     {
         return $this->title;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\Media $image
+     * @return PlaylistAudio
+     */
+    public function setImage(\Application\Sonata\MediaBundle\Entity\Media $image = null)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \Application\Sonata\MediaBundle\Entity\Media 
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

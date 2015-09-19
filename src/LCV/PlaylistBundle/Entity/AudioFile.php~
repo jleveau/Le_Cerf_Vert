@@ -1,11 +1,12 @@
 <?php
-
 namespace LCV\PlaylistBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use LCV\PlaylistBundle\Validator\Constraints\ExtensionValidator;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * AudioFile
@@ -13,7 +14,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @ORM\Table(name="lcv_playlist_files")
  * @ORM\Entity(repositoryClass="LCV\PlaylistBundle\Entity\AudioFileRepository")
  * @ORM\HasLifecycleCallbacks
- * @UniqueEntity("title")
  */
 class AudioFile {
     /**
@@ -29,28 +29,26 @@ class AudioFile {
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Assert\NotBlank
      */
     private $name;
-
-    /**
+    
+     /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
-     * @Assert\NotBlank
      */
     private $title;
+    
 
-    /**
-     * @Assert\File(maxSize="20000000" ,
-     * mimeTypes = {"audio/ogg", "audio/mpeg", "audio/wav"},
-     * mimeTypesMessage = "Ce fichier doit être un .ogg, .mp3 ou .wav")
+    /** 
+     * @Assert\File(
+     *     maxSize = "20000000")
      */
     private $file;
 
     /**
      * @var string
-     *
+     * 
      * @ORM\Column(name="path", type="string", length=255, nullable=true)
      */
     private $path;
@@ -60,15 +58,43 @@ class AudioFile {
      */
     private $playlist_audios;
     
-
+     /**
+     * @var string
+     * 
+     * @ORM\Column(name="extension", type="string", length=255)
+     */
+    private $extension;
+    
     /**
      * @var string
      *
      * @ORM\Column(name="uploadDir", type="string", length=255, nullable=true)
      */
     private $uploadDir;
-    /////
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="LCV\PlaylistBundle\Entity\AudioCategory", inversedBy="audios")
+     */
+    private $category;
 
+    /////
+      /**
+   * @Assert\Callback
+   */
+  public function isExtensionValid(ExecutionContextInterface $context)
+  {
+    // On vérifie que le contenu ne contient pas l'un des mots
+    if (!preg_match('/\.*(ogg|mp3|wav)/', $this -> file->getClientOriginalName()) && $this->file!=null) {
+      // La règle est violée, on définit l'erreur
+      $context
+        ->buildViolation('Le fichier doit etre un .mp3,.ogg ou .wav') // message
+        ->atPath('file')                                                   // attribut de l'objet qui est violé
+        ->addViolation() // ceci déclenche l'erreur, ne l'oubliez pas
+      ;
+    }
+  }
+
+  
     public function setFile($file) {
         $this -> file = $file;
     }
@@ -81,7 +107,7 @@ class AudioFile {
         if (($this -> path != NULL) && ($this -> name != NULL)) {
 
             $this -> file = new UploadedFile($this -> getUploadRootDir() . $this -> getUploadDir() . $this -> name, $this -> name);
-
+            
             return $this -> file;
         }
         return NULL;
@@ -102,6 +128,8 @@ class AudioFile {
         return $this -> uploadDir;
     }
 
+
+
     public function upload() {
         if (null === $this -> file) {
             return;
@@ -110,19 +138,21 @@ class AudioFile {
             $old = new UploadedFile($this -> getUploadRootDir() . $this -> getUploadDir() . $this -> name, $this -> name);
             unlink($old);
         }
+        $this->title=$this->file->getClientOriginalName();
+        $this->defineExtension();
         // On enleve le / devant
         $this -> uploadDir =  '/';
-        $this -> name = $this -> file -> getClientOriginalName();
+        $this -> name = sha1(uniqid(mt_rand(), true)) .'.'.$this->extension;
 
         // use the original file name here but you should
         // sanitize it at least to avoid any security issues
 
         // move takes the target directory and then the
         // target filename to move to
-        $this -> file -> move($this -> getUploadRootDir() . $this -> getUploadDir(), $this -> file -> getClientOriginalName());
+        $this -> file -> move($this -> getUploadRootDir() . $this -> getUploadDir(), $this -> name);
 
         // set the path property to the filename where you've saved the file
-        $this -> path = $this -> file -> getClientOriginalName();
+        $this -> path = $this -> name .'.'.$this->extension;
     }
 
     /**
@@ -200,27 +230,6 @@ class AudioFile {
     }
 
     /**
-     * Set title
-     *
-     * @param string $title
-     * @return AudioFile
-     */
-    public function setTitle($title) {
-        $this -> title = $title;
-
-        return $this;
-    }
-
-    /**
-     * Get title
-     *
-     * @return string
-     */
-    public function getTitle() {
-        return $this -> title;
-    }
-
-    /**
      * Set uploadDir
      *
      * @param string $uploadDir
@@ -230,5 +239,98 @@ class AudioFile {
         $this -> uploadDir = $uploadDir;
 
         return $this;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->playlist_audios = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add playlist_audios
+     *
+     * @param \LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios
+     * @return AudioFile
+     */
+    public function addPlaylistAudio(\LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios)
+    {
+        $this->playlist_audios[] = $playlistAudios;
+        $playlistAudios->setAudio($this);
+        return $this;
+    }
+
+    /**
+     * Remove playlist_audios
+     *
+     * @param \LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios
+     */
+    public function removePlaylistAudio(\LCV\PlaylistBundle\Entity\PlaylistAudio $playlistAudios)
+    {
+        $this->playlist_audios->removeElement($playlistAudios);
+    }
+
+    /**
+     * Get playlist_audios
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getPlaylistAudios()
+    {
+        return $this->playlist_audios;
+    }
+
+    /**
+     * Set extension
+     *
+     * @param string $extension
+     * @return AudioFile
+     */
+    public function setExtension($extension)
+    {
+        $this->extension = $extension;
+
+        return $this;
+    }
+
+    /**
+     * Get extension
+     *
+     * @return string 
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+    
+    public function defineExtension(){
+         if ($this->file ===null) 
+            return;
+         $tab=explode(".", $this -> file->getClientOriginalName());
+         $this->extension=end($tab);
+    }
+
+    /**
+     * Set title
+     *
+     * @param string $title
+     * @return AudioFile
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    /**
+     * Get title
+     *
+     * @return string 
+     */
+    public function getTitle()
+    {
+        return $this->title;
     }
 }

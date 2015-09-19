@@ -12,4 +12,16 @@ use Doctrine\ORM\EntityRepository;
  */
 class PlaylistCategoryRepository extends EntityRepository
 {
+    
+        public function getPlaylists(){
+        $query = $this->createQueryBuilder('c')
+        ->leftJoin('c.playlists','p')
+        ->addSelect('p')
+        ->orderBy('p.date','ASC')
+        ->orderBy('c.name','ASC')
+        ->getQuery();
+        
+        return $query->getResult();
+    }
+    
 }

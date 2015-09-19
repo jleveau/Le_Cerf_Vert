@@ -1,7 +1,26 @@
-{% extends "::base.html.twig" %}
+{# src/OC/PlatformBundle/Resources/views/playlist/delete.html.twig #}
 
-{% block title %}LCVPlaylistBundle:Playlist:delete{% endblock %}
+{% extends "LCVPlaylistBundle::layout.html.twig" %}
 
-{% block body %}
-<h1>Welcome to the Playlist:delete page</h1>
+{% block title %}
+Supprimer une Playlist - {{ parent() }}
+{% endblock %}
+
+{% block lcvplaylist_body %}
+
+<h2>Supprimer une playlist</h2>
+
+<p>
+	Etes-vous certain de vouloir supprimer la playlist "{{ playlist.title }}" ?
+</p>
+
+{# On met l'id de l'annonce dans la route de l'action du formulaire #}
+<form action="{{ path('lcv_playlist_delete', {'playlist_id': playlist.id}) }}" method="post">
+	<a href="{{ path('lcv_playlist_view', {'playlist_id': playlist.id}) }}" class="btn btn-default"> <i class="glyphicon glyphicon-chevron-left"></i> Retour à la Playlist </a>
+	{# Ici j'ai écrit le bouton de soumission à la main #}
+	<input type="submit" value="Supprimer" class="btn btn-danger" />
+	{# Ceci va générer le champ CSRF #}
+	{{ form_rest(form) }}
+</form>
+
 {% endblock %}

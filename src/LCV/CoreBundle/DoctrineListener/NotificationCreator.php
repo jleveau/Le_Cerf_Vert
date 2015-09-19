@@ -26,16 +26,27 @@ class NotificationCreator{
     if ($entity instanceof Comment) {
         $em =$args->getEntityManager();
         $comment = $entity;
-        $article=$comment->getArticle();
-        
-        if ($article->getAuthor()==$this->container->get('security.context')->getToken()->getUser())
-            return;
-        
-        $notification= new Notification();
-        $notification->setUser($article->getAuthor());
-        $notification->setType('comment');
-        $notification->setArticle($article);
-        $notification->setMessage("<small> Le ".date("m/d/Y \à H:i:s",$comment->getDate()->getTimestamp())."</small> - <strong>".$comment->getAuthor()."</strong> a commenté votre article ");
+       ;
+        if ( $article=$comment->getArticle()){
+            if ($article->getAuthor()==$this->container->get('security.context')->getToken()->getUser())
+                return;
+            
+            $notification= new Notification();
+            $notification->setUser($article->getAuthor());
+            $notification->setType('article_comment');
+            $notification->setArticle($article);
+            $notification->setMessage("<small> Le ".date("m/d/Y \à H:i:s",$comment->getDate()->getTimestamp())."</small> - <strong>".$comment->getAuthor()."</strong> a commenté votre article ");
+        }
+        else if ($playlist=$comment->getPlaylist()){
+            if ($playlist->getAuthor()==$this->container->get('security.context')->getToken()->getUser())
+                return;
+            
+            $notification= new Notification();
+            $notification->setUser($playlist->getAuthor());
+            $notification->setType('playlist_comment');
+            $notification->setPlaylist($playlist);
+            $notification->setMessage("<small> Le ".date("m/d/Y \à H:i:s",$comment->getDate()->getTimestamp())."</small> - <strong>".$comment->getAuthor()."</strong> a commenté votre playlist ");
+        }
         $em -> persist($notification);
         $em -> flush();
       }

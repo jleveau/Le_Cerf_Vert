@@ -212,7 +212,6 @@ class Comment
     public function setPlaylist(\LCV\PlaylistBundle\Entity\Playlist $playlist = null)
     {
         $this->playlist = $playlist;
-
         return $this;
     }
 

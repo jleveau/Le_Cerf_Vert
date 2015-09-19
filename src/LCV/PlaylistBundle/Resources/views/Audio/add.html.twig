@@ -1,0 +1,88 @@
+{% extends "LCVPlaylistBundle::layout.html.twig" %}
+
+{% block lcvplaylist_body %}
+
+
+<div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Upload de fichiers</h3>
+        </div>
+        <div class="panel-body">
+            <ul>
+                <li>Les fichiers doivent être des .ogg .mp3 ou .wav</li>
+                <li>Vous pouvez drag & drop les fichiers directement dans la fenetre, ou cliquer sur le bouton pour les selectionner</li>
+                
+            </ul>
+        </div>
+</div>
+
+<a class="btn btn-default" href="{{ path('lcv_platlist_audio_index') }}" role="button">Voir les Morceaux</a>
+
+<div class="btn btn-success fileinput-button">
+        <i class="glyphicon glyphicon-plus"></i>
+        <span>Envoyer des fichiers</span>
+        <!-- The file input field used as target for the file upload widget -->
+		<input id="fileupload" type="file" name="files[]" data-url="{{ oneup_uploader_endpoint('audio') }}" multiple />
+</div>
+
+</br>
+</br>
+
+<div id="progress" class="progress">
+        <div class="progress-bar progress-bar-success"></div>
+</div>
+
+    <!-- The container for the uploaded files -->
+<ul  id="files" class="files"></ul>
+    
+    
+<script type="text/javascript">
+/*jslint unparam: true, regexp: true */
+/*global window, $ */
+
+$(document).ready(function()
+{
+	var id=0;
+	var file_div=$('#files');
+	var url='{{ oneup_uploader_endpoint('audio') }}'
+
+    
+	$('#fileupload').fileupload(
+		
+		{
+			url: url,
+			formData: {category: "{{ category.id }}" }
+		},
+		{
+		progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            if (data.loaded == data.total){
+            	$('#progress .progress-bar').css( "background-color","#4cae4c");
+            }
+            
+            $('#progress .progress-bar').css(
+                'width',
+                progress + '%'
+            );
+			}
+		}
+	);
+		
+	
+	$('#fileupload').on('fileuploadadd', function (e, data) {
+        data.context = $('<div/>').appendTo('#files');
+        if (data.originalFiles[0].type == "audio/mp3" || data.originalFiles[0].type == "audio/ogg" || data.originalFiles[0].type == "audio/wav"){
+	        console.log(data);
+	        $('#progress .progress-bar').css( "background-color","#357ebd")
+	        
+	        $.each(data.files, function (index, file) {
+	            file_div.append($('<li class=list-group-item>'+file.name+'</li>'));
+	        });
+        }
+    })
+});
+
+
+
+</script>
+{% endblock %}

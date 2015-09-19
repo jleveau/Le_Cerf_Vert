@@ -30,4 +30,15 @@ class CommentRepository extends EntityRepository
         
             return $query->getResult();
         }
+      
+     public function getPlaylistComments($playlist_id){
+           $query = $this->createQueryBuilder('c')
+            ->leftJoin('c.playlist','p')
+            ->where('p.id = :playlist_id')
+            ->setParameter('playlist_id', $playlist_id)
+            ->orderBy('c.date','DESC')
+            ->getQuery();
+        
+            return $query->getResult();
+        }
 }

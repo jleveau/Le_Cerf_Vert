@@ -27,22 +27,24 @@
   
   {% for category in listCategories %}
 	{% set cat = category %}
+	
     <div class="panel-heading" role="tab" id="{{"heading" ~ cat.id }}">
-      <h4 class="panel-title">
-      	<div class="row">
-      	
-        <a class="collapsed col-md-11" role="button" data-toggle="collapse" data-parent="#accordion" href="{{"#collapse" ~ cat.id }}" aria-expanded="false" aria-controls="{{"collapse" ~ cat.id }}">
-          {{  cat.name }}                                               
-        <a type="button" style="color:green" title="ajouter un article" class="glyphicon glyphicon-plus-sign" href="{{ path('lcv_platform_add', {'categoryId': cat.id}) }}"> </a>
-		{% if cat.removable %}
-			{% if cat.articles is empty %}
-			    <a type="button" style="color:red" class="glyphicon glyphicon-minus-sign" href="{{ path('lcv_platform_delete_category', {'id': cat.id}) }}"> </a>
-	        {% else %}
-	        	<a type="button" style="color:red" class="glyphicon glyphicon-minus-sign" data-toggle="popover" data-placement="left" data-content="Il y a des articles là dedans !" > </a>
-			{% endif %}
-		{% endif %}
-        </div>
-      </h4>
+	      <h4 class="panel-title">
+		      	<div class="row">
+			      	
+			        <a class="collapsed col-md-11" role="button" data-toggle="collapse" data-parent="#accordion" href="{{"#collapse" ~ cat.id }}" aria-expanded="false" aria-controls="{{"collapse" ~ cat.id }}">
+			         	 {{  cat.name }}                                               
+				        <a type="button" style="color:green" title="ajouter un article" class="glyphicon glyphicon-plus-sign" href="{{ path('lcv_platform_add', {'categoryId': cat.id}) }}"> </a>
+							{% if cat.removable %}
+								{% if cat.articles is empty %}
+								    <a type="button" style="color:red" class="glyphicon glyphicon-minus-sign" href="{{ path('lcv_platform_delete_category', {'id': cat.id}) }}"> </a>
+						        {% else %}
+						        	<a type="button" style="color:red" class="glyphicon glyphicon-minus-sign" data-toggle="popover" data-placement="left" data-content="Il y a des articles là dedans !" > </a>
+								{% endif %}
+							{% endif %}
+					</a>
+			    </div>
+	      </h4>
     </div>
     
     <div id="{{"collapse" ~ cat.id }}" class="panel-collapse collapse" role="tabpanel"  aria-labelledby="{{"heading" ~ cat.id }}">

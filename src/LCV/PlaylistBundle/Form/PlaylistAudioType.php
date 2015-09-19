@@ -20,10 +20,11 @@ class PlaylistAudioType extends AbstractType
     {
               
           $builder
-          ->add('audio', new AudioFileType(), array(
-                      'label' => ' ',
-                      'required'      => false,
-                      ))
+           ->add('image', 'sonata_media_type', array(
+                 'provider' => 'sonata.media.provider.image',
+                 'context'  => 'audio_image',
+                 'required' => false
+            ))
           ->add('title','text', array(
                       'label' => ' ',
                       'required' => true))

@@ -40,3 +40,4 @@ lcv_platform_delete_category:
     defaults:  { _controller: LCVPlatformBundle:Article:deleteCategory}
     requirements:
         id: \d+
+        

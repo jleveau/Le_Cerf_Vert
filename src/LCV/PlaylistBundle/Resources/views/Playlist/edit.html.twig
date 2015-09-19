@@ -2,10 +2,8 @@
 
 {% block lcvplaylist_body %}
 
-  <h2>{{playlist.title}}</h2>
-  <hr>
        
-    <form id="playlist_form" class="edit-form" action="{{ path('lcv_playlist_edit', { playlist_id: playlist.id}) }}" method="post" {{ form_enctype(form) }}>
+    <form id="playlist_form" class="edit-form" action="{{ path('lcv_playlist_edit', { 'playlist_id': playlist.id}) }}" method="post" {{ form_enctype(form) }}>
 
        {{ form_errors(form) }}
 
@@ -22,14 +20,17 @@
  	   </div>
  	   
  	   {{ form_widget(form.save) }}	
+ 	   <a href="{{ path('lcv_playlist_view', { 'playlist_id': playlist.id}) }}" class="btn btn-default">Ecouter</a>
+	    
  	   <hr>
- 	   <table id="playlist_table" class="table table-striped sortable" data-prototype=" {% filter escape %} {{ include("LCVPlaylistBundle:Playlist:audio_file_prototype.html.twig") }}{% endfilter %} ">
+ 	   
+ 	   <table id="playlist_table" class="table table-striped sortable">
 	 	   <thead>
 	 	   		<tr>
 	 	   			<th></th>
 	 	   			<th>Titre</th>
-	 	   			<th>Fichier</th>
-	 	   			<th>Actions</th>
+	 	   			<th>Image</th>
+	 	   			<th></th> 
 	 	   		</tr>
 	 	   </thead>
 	 	   
@@ -43,23 +44,28 @@
 							 	  {{ form_widget(playlist_audio.sortOrder) }}
 							 	 </div>
 							  </td>
-			 	   			  <th class="col-md-3">
+			 	   			  <th class="col-md-2">
 				 	   			  {{ form_errors(playlist_audio.title) }}			      
 							 	  {{ form_widget(playlist_audio.title) }}
 							  </th>
-							  <td class="col-md-6">
-				 	   			  {{ form_errors(playlist_audio.audio.file) }}			      
-							 	  {{ form_widget(playlist_audio.audio.file) }}
+							  <td class="col-md-2">
+				 	   			  {{ form_errors(playlist_audio.image) }}			      
+							 	  {{ form_widget(playlist_audio.image) }}
 							  </td>
-							  <td class="action_buttons"></td>
+							  <td class="action_buttons col-md-2"></td>
+							  <td class="col-md-2" data-toggle="popover"></td>
 						 	</th>
 			 	   		</tr>
 			 	   		
 			 	   		<tr class="audio_row view">
 			 	   			<td class="sorter col-md-1"></td>
-			 	   			<th class="col-md-3">{{playlist_audio.vars.value.title }}</th>
-						 	<td class="col-md-6"> {{playlist_audio.audio.vars.value.name }}</td>
-						 	<td class="action_buttons"></td>
+			 	   			<th class="col-md-3">{{playlist_audio.vars.value.title }}</th>		
+			 	   							 	
+						 	<td class="image_popover col-md-2" image='{% media playlist_audio.vars.value.image, 'medium'%}'>
+						 		{{playlist_audio.vars.value.image }}
+						 	</td>
+						 	<td class="action_buttons col-md-2"></td>
+						 	<td class=" col-md-2" data-toggle="popover"></td>
 			 	 	    </tr>
 			 	 </tbody>
 		 	 {% endfor %}
@@ -67,21 +73,23 @@
 
 	    </table>
 
-      	<div style="cursor:pointer" id="add_tag_link" class="alert alert-success">
-		<span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Ajouter un Morceau sur la Playlist</div>
+		
+		
       	{{ form_rest(form) }}
 </form>
+<script type="text/javascript">
 
-	<style>
+	$( document ).ready(function() {
+		
+		$('.image_popover').each(function (){
+			$(this).popover({
+				html:       true,
+			    trigger:    'hover',
+			    content:    $(this).attr("image")
+			})
+		})
+	});
 
-	  
-		.sorter {
-			
-		    cursor: ns-resize;
-		    width: 20px;
-		}
-	
-	</style>
-
+</script>
 
 {% endblock %}

@@ -3,26 +3,43 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  
   <title>{% block title %}Le Cerf Vert{% endblock %}</title>
    {% block javascripts %}
 
 	    {% stylesheets 
             '%kernel.root_dir%/../vendor/kartik-v/bootstrap-star-rating/css/star-rating.min.css'
             '%kernel.root_dir%/../web/css/bootstrap.css'
+            '%kernel.root_dir%/../web/assets/jplayer/dist/jplayer/css/jplayer.blue.monday.css'
+            '@LCVPlaylistBundle/Resources/public/jQuery-File-Upload/css/jquery.fileupload.css'
+            '@LCVPlaylistBundle/Resources/public/css/tree.css'
+            
             filter='lessphp,cssrewrite' 
         %} 
         <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}   
 
 		{% javascripts
+			
 		   '%kernel.root_dir%/../web/js/jquery.js'
 		   '%kernel.root_dir%/../web/js/jquery-ui.min.js'
 		   '%kernel.root_dir%/../web/js/bootstrap.js'
 		   '%kernel.root_dir%/../web/js/underscore-min.js'
+		   '%kernel.root_dir%/../web/assets/jplayer/dist/jplayer/js/jplayer.playlist.js'
+		   '%kernel.root_dir%/../web/assets/jplayer/dist/jplayer/js/jquery.jplayer.js'
+		   
+		   '@LCVPlaylistBundle/Resources/public/jQuery-File-Upload/js/jquery.fileupload.js'
+		   '@LCVPlaylistBundle/Resources/public/jQuery-File-Upload/js/jquery.iframe-transport.js'
+		   '@LCVPlaylistBundle/Resources/public/jQuery-File-Upload/js/jquery.fileupload-process.js'
+		
+		   '%kernel.root_dir%/../vendor/kartik-v/bootstrap-star-rating/js/star-rating.min.js'
+
 		   '@LCVPlatformBundle/Resources/public/js/stupidtable.min.js'
 		   '@LCVPlaylistBundle/Resources/public/js/playlist.js'
+		   '@LCVPlaylistBundle/Resources/public/js/uploader.js'		   
+
+		%}
 			
-		   '%kernel.root_dir%/../vendor/kartik-v/bootstrap-star-rating/js/star-rating.min.js'%}
 		   <script type="text/javascript" src="{{ asset_url }}"></script>
 		{% endjavascripts %}
 		
@@ -73,11 +90,10 @@
 	            <li><a href="{{ path('lcv_platform_list_articles') }}">Tous les Articles</a></li>
 	        </ul>
         </li>
-         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Playlists <span class="caret"></span></a>
+         <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Musique <span class="caret"></span></a>
 	        <ul class="dropdown-menu">
-	            <li><a href="{{ path('lcv_playlist_add') }}">Créer une Playlist</a></li>
-	            <li><a href="{{ path('lcv_playlist_index') }}">Categories</a></li>
-	            <li><a href="{{ path('lcv_playlist_list') }}">Toutes les playlists</a></li>
+	            <li><a href="{{ path('lcv_playlist_list') }}">Playlists</a></li>
+	            <li><a href="{{ path('lcv_platlist_audio_index') }}">Morceaux</a></li>
 	        </ul>
         </li>
        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -87,7 +103,7 @@
         {% endif %}
            	<ul class="dropdown-menu">
         		{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
-	        	    <li><a href="{{ path('sonata_user_profile_edit') }}">Dashboard</a></li>
+	        	    <li><a href="{{ path('sonata_user_profile_edit') }}">Profil</a></li>
 		            <li><a href="{{ path('fos_user_security_logout') }}">Déconnexion</a></li>
 	            {% else %}
 		            <li><a href="{{ path('fos_user_security_login') }}">Connection</a></li>
@@ -121,15 +137,18 @@
 				<ul class="nav nav-pills" role="tablist">
 				  <li ><a data-toggle="collapse" aria-expanded="false" aria-controls="collapseNotifications" href="#collapseNotifications">Notifications <span class="badge">
 				  		{{app.user.notifications|length}}</span></a></li>
-				  <li ><a href="{{ path('sonata_user_profile_edit') }}">Profile</a></li>
+				  <li ><a href="{{ path('sonata_user_profile_edit') }}">Profil</a></li>
 				</ul>
 				
 				<div class="collapse" id="collapseNotifications">
 				  <div>
 				      <ul class="list-group">
 				 	  {% for notification in app.user.notifications%}
-				 	  	{% if notification.type == 'comment' %}
-						  <li class="list-group-item">{{notification.message|raw}}<a href="{{ path('lcv_platform_view',{id : notification.article.id}) }}">{{notification.article.title}}</a> </li>
+				 	  	{% if notification.type == 'article_comment' %}
+						  <li class="list-group-item">{{notification.message|raw}}<a href="{{ path('lcv_platform_view',{'id' : notification.article.id}) }}">{{notification.article.title}}</a> </li>
+						{% endif %}
+						{% if notification.type == 'playlist_comment' %}
+						  <li class="list-group-item">{{notification.message|raw}}<a href="{{ path('lcv_playlist_view',{'playlist_id' : notification.playlist.id}) }}">{{notification.playlist.title}}</a> </li>
 						{% endif %}
 				 	  {% endfor %}
 				 	  {% if not app.user.notifications is empty  %}

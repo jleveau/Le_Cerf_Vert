@@ -22,3 +22,14 @@ services:
             - ~
             - LCV\PlaylistBundle\Entity\Playlist
             - ~   
+    sonata.admin.audiofile:
+        class: LCV\PlaylistBundle\Admin\AudioFileAdmin
+        tags:
+            - name: sonata.admin
+              manager_type: orm
+              group: Audio
+              label: AudioFile
+        arguments:
+            - ~
+            - LCV\PlaylistBundle\Entity\AudioFile
+            - ~

@@ -12,6 +12,26 @@ use Doctrine\ORM\EntityRepository;
  */
 class PlaylistRepository extends EntityRepository {
     
+    public function titleAvailable($playlist_id,$title){
+        $query = $this->createQueryBuilder('playlist')
+            ->where('playlist.id = :playlist_id')
+            ->leftJoin('playlist.playlist_audios','playlist_audio')
+            ->andWhere('playlist_audio.title = :title')
+            ->setParameters(array('title' => $title, 'playlist_id' => $playlist_id))
+            ->getQuery();
+         ;
+         return empty($query->getResult());
+    }
+    
+    public function getUserPlaylist($user){
+        $query = $this->createQueryBuilder('playlist')
+        ->where('playlist.author = :user')
+        ->setParameter('user', $user->getId())
+        ->getQuery();
+        
+        return $query->getResult();
+    }
+    
     public function getLastPlaylists($limite) {
         $qb = $this -> createQueryBuilder('p') 
             -> orderBy('p.date', 'DESC') 
@@ -28,5 +48,30 @@ class PlaylistRepository extends EntityRepository {
             ->addSelect('a')
             ->orderBy('a.sortOrder', 'ASC') ;
         return $qb -> getQuery() -> getResult()[0];
+    }
+    
+    public function getPlaylistsWithCategory(){
+        $query = $this->createQueryBuilder('p')
+        ->leftJoin('p.category','c')
+        ->addSelect('c')
+   //     ->leftJoin('p.rate','r')
+   //     ->addSelect('r')
+        ->orderBy('c.name','ASC')
+        ->getQuery();
+    
+        return $query->getResult();
+    }
+    
+    public function getPlaylistVoteUser($playlist_id,$user){
+        $query = $this->createQueryBuilder('playlist')
+        ->where('playlist.id = :playlist_id')
+        ->leftJoin('playlist.rate','rate')
+        ->addSelect('rate')
+        ->leftJoin('rate.votes','vote')
+        ->andWhere('vote.voter = :user')
+        ->setParameters(array('user' => $user, 'playlist_id' => $playlist_id))
+        ->getQuery();
+        
+        return $query->getResult();
     }
 }

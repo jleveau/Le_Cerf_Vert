@@ -1,0 +1,56 @@
+{% extends "SonataUserBundle:Profile:action.html.twig" %}
+
+
+{% block sonata_profile_content %}
+	  <h2>Playlists</h2>
+	
+	  <table class="table">
+	    <thead>
+	      <tr>
+	        <th data-sort="string">Titre</th>
+	        <th data-sort="string">Categorie</th>
+	        <th data-sort="string">Date écriture</th>
+	        <th data-sort="string">Dernière modification</th>
+        	<th data-sort="string">vues</th>
+	        <th data-sort="string">Note </th>
+	      </tr>
+	    </thead>
+	    <tbody>
+	    {% for playlist in list_playlists %}
+		    
+	      <tr>
+	        <td> <a href="{{ path('lcv_playlist_view', {'playlist_id': playlist.id}) }}">{{ playlist.title }} </a> </td>
+	        <td> {{ playlist.category.name }} </td>
+	        <td> {{ playlist.date.format('d/m/Y') }} </td>
+	        <td> {{ playlist.updatedAt.format('d/m/Y') }} </td>
+	        <td> {{ playlist.views }} </td>
+	        <td><input type="number" class="rating" min=0 max=5 value={{ playlist.rate.rate }} step=1 data-size="xxs" ></td>
+	        
+	        <td>  <a href="{{ path('lcv_playlist_edit', {'playlist_id': playlist.id}) }}" class="btn btn-default">
+			      <i class="glyphicon glyphicon-edit"></i></a>
+			      
+			      <a href="{{ path('user_delete_playlist', {'id': playlist.id}) }}" class="btn btn-danger">
+			      <i class="glyphicon glyphicon-trash"></i>
+			    </a>
+			</td>
+			
+	      </tr>
+	    {% endfor %}
+	    </tbody>
+	  </table>
+	
+		<style type="text/css">
+	   
+	    th[data-sort]{
+	      cursor:pointer;
+	    }
+	    tr.awesome{
+	      color: red;
+	    }
+	  </style>
+	    <script>
+	    $(function(){
+	        $("table").stupidtable();
+	    });
+	  </script>
+{% endblock %}

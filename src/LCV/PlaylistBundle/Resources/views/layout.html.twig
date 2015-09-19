@@ -2,7 +2,7 @@
 {% extends "::layout.html.twig" %}
 
 {% block title %}
-  Playlists - {{ parent() }}
+{{ parent() }} - Musique
 {% endblock %}
 
 
@@ -10,26 +10,27 @@
 {% block body %}
 	<div class="container">
 	    <div id="header" class="page-header">
-	      <h1>Les Playlists</h1>
-	     {% for flashMessage in app.session.flashbag.get("success") %}
-	            <div class="alert alert-success">
-	                {{ flashMessage }}
-	            </div>
-	     {% endfor %}
-	     {% for flashMessage in app.session.flashbag.get("danger") %}
-	     
-	     	    <div class="alert alert-danger">
-	                {{ flashMessage }}
-	            </div>
-	      {% endfor %}
+	      <h1>Musique</h1>
+	      <div id="flash_message">
+		     {% for flashMessage in app.session.flashbag.get("success") %}
+		            <div id="flash_success" class="alert alert-success">
+		                {{ flashMessage }}
+		            </div>
+		     {% endfor %}
+		     {% for flashMessage in app.session.flashbag.get("danger") %}
+		     	    <div id="flash_error" class="alert alert-danger">
+		                {{ flashMessage }}
+		            </div>
+		      {% endfor %}
+	      </div>
 	    </div>
 	
 		    <div class="row">
 		      <div id="menu" class="col-md-2">
 		        <ul class="nav nav-pills nav-stacked">
-		          <li><a href="{{ path('lcv_playlist_add') }}">Ajouter une playliste</a></li>
-		          <li><a href="{{ path('lcv_playlist_index') }}">Catégories</a></li>
-		          <li><a href="{{ path('lcv_playlist_list') }}">Toutes</a></li>
+		          <li><a href="{{ path('lcv_playlist_add') }}">Créer une playlist</a></li>
+		          <li><a href="{{ path('lcv_playlist_list') }}">Les playlists</a></li>
+		          <li><a href="{{ path('lcv_platlist_audio_index') }}">Les morceaux</a></li>
 		        </ul>
 		      </div>
 		      <div id="content" class="col-md-8">

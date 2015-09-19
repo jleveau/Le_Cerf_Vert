@@ -29,7 +29,15 @@ class News
      * @ORM\JoinColumn(name="article_id", nullable=true)
      */
     private $article;
-
+    
+     /**
+     * @var LCV\PlaylistBundle\Entity\Playlist
+     *
+     * @ORM\OneToOne(targetEntity="LCV\PlaylistBundle\Entity\Playlist", inversedBy="new")
+     * @ORM\JoinColumn(name="playlist_id", nullable=true)
+     */
+    private $playlist;
+    
     /**
      * @var string
      * @ORM\Column(name="type", type="string", length=255)
@@ -159,5 +167,28 @@ class News
     public function getAbstract()
     {
         return $this->abstract;
+    }
+
+    /**
+     * Set playlist
+     *
+     * @param \LCV\PlaylistBundle\Entity\Playlist $playlist
+     * @return News
+     */
+    public function setPlaylist(\LCV\PlaylistBundle\Entity\Playlist $playlist = null)
+    {
+        $this->playlist = $playlist;
+
+        return $this;
+    }
+
+    /**
+     * Get playlist
+     *
+     * @return \LCV\PlaylistBundle\Entity\Playlist 
+     */
+    public function getPlaylist()
+    {
+        return $this->playlist;
     }
 }

@@ -6,10 +6,18 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Application\Sonata\UserBundle\Entity\Invitation;
 use Application\Sonata\UserBundle\Form\Type\AskInvitationFormType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 class UserController extends Controller
 {
+    public function profilePlaylistsAction(){
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $list_playlists=$user->getPlaylists();
+        return $this->render('ApplicationSonataUserBundle:Profile:profilePlaylists.html.twig', array(
+            'list_playlists' => $list_playlists
+            ));    
+    }
     
     public function profileArticlesAction()
     {
@@ -20,10 +28,32 @@ class UserController extends Controller
             ));    
     }
     
+    public function profileDeletePlaylistAction($id, Request $request) {
+        $em = $this -> getDoctrine() -> getManager();
+
+        // On récupère l'annonce $id 
+        $playlist = $em -> getRepository('LCVPlaylistBundle:Playlist') -> find($id);
+
+        if (null === $playlist) {
+            throw new NotFoundHttpException("La playlist d'id " . $id . " n'existe pas.");
+        }
+
+        $em -> remove($playlist);
+        $em -> flush();
+
+        $request -> getSession() -> getFlashBag() -> add('info', "La playlist a bien été supprimée.");
+        
+        $user = $this->container->get('security.token_storage')->getToken()->getUser();
+        $list_playlists=$user->getPlaylists();
+        return $this->render('ApplicationSonataUserBundle:Profile:profilePlaylists.html.twig', array(
+            'list_playlists' => $list_playlists
+            ));    
+    }
+    
     public function profileDeleteArticleAction($id, Request $request) {
         $em = $this -> getDoctrine() -> getManager();
 
-        // On récupère l'annonce $id
+        // On récupère l'annonce $id 
         $article = $em -> getRepository('LCVPlatformBundle:Article') -> find($id);
 
         if (null === $article) {

@@ -1,4 +1,10 @@
 services:
-#    lcv_playlist.example:
-#        class: LCV\PlaylistBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    audio.upload_listener:
+          class: LCV\PlaylistBundle\EventListener\UploadListener
+          arguments: ["@doctrine.orm.entity_manager"]
+          tags:
+              - { name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload }
+    audio.validation_listener:
+          class: LCV\PlaylistBundle\EventListener\AudioValidatorListener
+          tags:
+              - { name: kernel.event_listener, event: oneup_uploader.validation, method: onValidate }     

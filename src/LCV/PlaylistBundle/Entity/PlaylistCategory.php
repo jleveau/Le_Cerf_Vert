@@ -36,6 +36,13 @@ class PlaylistCategory
      */
     private $playlists;
 
+
+     /**
+     * @ORM\Column(name="ramovable", type="boolean")
+     */
+    private $removable;
+    
+
     /**
      * Get id
      *
@@ -74,6 +81,7 @@ class PlaylistCategory
     public function __construct()
     {
         $this->playlists = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->removable = true;
     }
 
     /**
@@ -107,5 +115,28 @@ class PlaylistCategory
     public function getPlaylists()
     {
         return $this->playlists;
+    }
+
+    /**
+     * Set removable
+     *
+     * @param boolean $removable
+     * @return PlaylistCategory
+     */
+    public function setRemovable($removable)
+    {
+        $this->removable = $removable;
+
+        return $this;
+    }
+
+    /**
+     * Get removable
+     *
+     * @return boolean 
+     */
+    public function getRemovable()
+    {
+        return $this->removable;
     }
 }

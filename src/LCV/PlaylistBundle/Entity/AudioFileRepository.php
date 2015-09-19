@@ -12,4 +12,18 @@ use Doctrine\ORM\EntityRepository;
  */
 class AudioFileRepository extends EntityRepository
 {
+
+        public function isInPlaylist($id){
+            $query = $this->createQueryBuilder('a')
+                ->leftJoin('a.playlist_audios','pa')
+                ->where('pa.audio = :id')
+                ->setParameter('id',$id)
+                
+                ->orderBy('pa.sortOrder','ASC')
+                ->getQuery();
+                dump($query->getResult());
+                return !empty($query->getResult());
+        }
+    
 }
+

@@ -1,7 +1,110 @@
-{% extends "::base.html.twig" %}
+{% extends "LCVPlaylistBundle::layout.html.twig" %}
 
-{% block title %}LCVPlaylistBundle:Playlist:index{% endblock %}
-
-{% block body %}
-<h1>Welcome to the Playlist:index page</h1>
+{% block title %}
+  Index - {{ parent() }}
 {% endblock %}
+
+{% block lcvplaylist_body %}
+
+
+       <form action="{{ path('lcv_playlist_index') }}" method="POST" class="form-inline">
+    
+ 	   {{ form_errors(form) }}
+		  <div class="form-group">
+		  {{ form_label(form.name, "Créer une catégorie")}}
+	      {{ form_errors(form.name) }}
+	      {{ form_widget(form.name) }}
+		  </div>
+		  {{ form_widget(form.save,{ 'label': 'Créer' }) }}
+		  
+	      {{ form_rest(form) }}
+  {# Fermeture de la balise <form> du formulaire HTML #}
+  
+	 {{ form_end(form) }}
+	<hr>
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	  <div class="panel panel-default">
+	  
+	  {% for category in listCategories %}
+		{% set cat = category %}
+	    <div class="panel-heading" role="tab" id="{{"heading" ~ cat.id }}">
+	      <h4 class="panel-title">
+	      	<div class="row">
+	      	
+		        <a class="collapsed col-md-11" role="button" data-toggle="collapse" data-parent="#accordion" href="{{"#collapse" ~ cat.id }}" aria-expanded="false" aria-controls="{{"collapse" ~ cat.id }}">
+		          {{  cat.name }}                                               
+					{% if cat.removable %}
+						{% if cat.playlists is empty %}
+						    <a type="button" style="color:red" class="glyphicon glyphicon-minus-sign" href="{{ path('lcv_playlist_delete_playlist_category', {'id': cat.id}) }}"> </a>
+				        {% else %}
+				        	<a type="button" style="color:red" class="glyphicon glyphicon-minus-sign" data-toggle="popover" data-placement="left" data-content="Il y a des playlists là dedans !" > </a>
+						{% endif %}
+					{% endif %}
+				</a>
+	        </div>
+	      </h4>
+	    </div>
+	    
+	    <div id="{{"collapse" ~ cat.id }}" class="panel-collapse collapse" role="tabpanel"  aria-labelledby="{{"heading" ~ cat.id }}">
+	    	
+	      <div class="panel-body">
+	          	  <table class="table">
+				    <thead>
+				      <tr>
+				        <th data-sort="string"> Titre</th>
+				        <th data-sort="string"> Auteur</th>
+				        <th data-sort="string"> Dernière modification</th>
+				        <th data-sort="string"> Date de création</th>
+				        <th data-sort="string"> Vues </th>
+				        <th data-sort="string"> Note </th>
+				      </tr>
+				    </thead>
+				    <tbody>
+				    {% for playlist in list_playlists %}
+						{%  if playlist.category == category %} 
+				      <tr>
+				        <td> <a href="{{ path('lcv_playlist_view', {'playlist_id': playlist.id}) }}">{{ playlist.title }} </a> </td>
+				        <td> {{ playlist.author.username }} </td>
+				        <td> {{ playlist.updatedAt.format('d/m/Y') }} </td>
+				        <td> {{ playlist.date.format('d/m/Y') }} </td>
+				        <td> {{ playlist.views }} </td>
+				        <td><input type="number" class="rating" min=0 max=5 value={{ playlist.rate.rate }} step=1 data-size="xxs" ></td> 
+				      </tr>
+				        {% endif %}
+				    {% endfor %}
+	
+				
+				    </tbody>
+				  </table>
+				  
+	      </div>
+	    </div>
+	    {% endfor %}
+	  </div>
+	</div>
+	
+	
+	  
+	<style type="text/css">
+		   
+		    th[data-sort]{
+		      cursor:pointer;
+		    }
+		    tr.awesome{
+		      color: red;
+		    }
+		  </style>
+		    <script>
+		    $(function(){
+		        $("table").stupidtable();
+		    });
+	
+			$(document).ready(function(){
+			    $('[data-toggle="popover"]').popover(); 
+			});
+			</script>
+		  
+		{% block lcv_playlist_list %}
+	
+	    {% endblock%} <!--  lcv_platform_list_articles -->
+	{% endblock lcvplaylist_body %} 

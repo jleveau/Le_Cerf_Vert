@@ -1,0 +1,40 @@
+sonata_media:
+    # if you don't use default namespace configuration
+    class:
+        media: Application\Sonata\MediaBundle\Entity\Media
+        gallery: Application\Sonata\MediaBundle\Entity\Gallery
+        gallery_has_media: Application\Sonata\MediaBundle\Entity\GalleryHasMedia
+    default_context: default
+    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr
+    contexts:
+        default:  # the default context is mandatory
+            providers:
+                - sonata.media.provider.dailymotion
+                - sonata.media.provider.youtube
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+    
+            formats:
+                small: { width: 100 , quality: 70}
+                big:   { width: 500 , quality: 70}
+                
+        profile:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 100 , quality: 95}
+                big:   { width: 250 , quality: 90}
+        audio_image:
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 100 , quality: 95}
+                medium: { width: 150 , quality: 90}
+                big:   { width: 480 , quality: 90}
+    cdn:
+        server:
+            path: /Le_Cerf_Vert/web/uploads/media # http://media.sonata-project.org/
+    filesystem:
+        local:
+            directory:  %kernel.root_dir%/../web/uploads/media
+            create:     true

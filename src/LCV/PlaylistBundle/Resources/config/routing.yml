@@ -3,9 +3,11 @@ lcv_playlist_upload:
     defaults: { _controller: LCVPlaylistBundle:Playlist:upload}
     
 lcv_playlist_view:
-    path:     /view
+    path:     /view/{playlist_id}
     defaults: { _controller: LCVPlaylistBundle:Playlist:view }
-
+    requirements:
+        playlist_id: \d+
+        
 lcv_playlist_add:
     path:     /add/{categoryId}
     defaults: { _controller: LCVPlaylistBundle:Playlist:add,categoryId: 0 }
@@ -13,9 +15,11 @@ lcv_playlist_add:
         categoryId: \d*
 
 lcv_playlist_delete:
-    path:     /delete
+    path:     /delete/{playlist_id}
     defaults: { _controller: LCVPlaylistBundle:Playlist:delete }
-
+    requirements:
+            categoryId: \d*
+            
 lcv_playlist_edit:
     path:     /edit/{playlist_id}
     defaults: { _controller: LCVPlaylistBundle:Playlist:edit}
@@ -29,3 +33,58 @@ lcv_playlist_index:
 lcv_playlist_list:
     path:     /list
     defaults: { _controller: LCVPlaylistBundle:Playlist:index }
+    
+lcv_playlist_delete_playlist_category:
+    path:      /index/delete_cat/{id}
+    defaults:  { _controller: LCVPlaylistBundle:Playlist:deleteCategory}
+    requirements:
+        id: \d+
+
+lcv_playlist_player_playlist:
+    path:     /playlistplayer/{playlist_id}
+    defaults: { _controller: LCVPlaylistBundle:Playlist:playlistPlayer }
+    requirements:
+            categoryId: \d+   
+        
+lcv_platlist_audio_add:
+    path:     /audio/add/{category_id}
+    defaults: { _controller: LCVPlaylistBundle:AudioManager:add, category_id: 0 }
+    requirements:
+        category_id: \d*
+       
+
+lcv_platlist_audio_delete:
+    path:     /audio/delete
+    defaults: { _controller: LCVPlaylistBundle:AudioManager:delete }
+
+lcv_platlist_audio_view:
+    path:     /audio/view
+    defaults: { _controller: LCVPlaylistBundle:AudioManager:view }
+    
+lcv_platlist_audio_index:
+    path:     /audio/index
+    defaults: { _controller: LCVPlaylistBundle:AudioManager:index}
+    
+lcv_platlist_audio_add_category:
+    path:     /audio/index/addCategory
+    defaults: { _controller: LCVPlaylistBundle:AudioManager:createAudioCategory}
+
+lcv_platlist_add_to_playlist:
+  pattern: /audio/index/addToPlaylist
+  defaults: { _controller: LCVPlaylistBundle:AudioManager:addAudioToPlaylist }
+  requirements:
+      _method: POST
+      
+lcv_platlist_delete_audio:
+  pattern: /audio/index/delete
+  defaults: { _controller: LCVPlaylistBundle:AudioManager:deleteAudio }
+  requirements:
+      _method: POST
+      
+      
+lcv_platlist_download_audio:
+  pattern: /audio/index/download
+  defaults: { _controller: LCVPlaylistBundle:AudioManager:downloadAudio }
+  requirements:
+      _method: POST
+

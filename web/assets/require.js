@@ -2021,24 +2021,15 @@ var requirejs, require, define;
 var components = {
     "packages": [
         {
-            "name": "elfinder",
-            "main": "elfinder-built.js"
-        },
-        {
-            "name": "jquery",
-            "main": "jquery-built.js"
-        },
-        {
-            "name": "jquery-ui",
-            "main": "jquery-ui-built.js"
+            "name": "jplayer",
+            "main": "jplayer-built.js"
         }
     ],
     "shim": {
-        "jquery-ui": {
+        "jplayer": {
             "deps": [
                 "jquery"
-            ],
-            "exports": "jQuery"
+            ]
         }
     },
     "baseUrl": "components"

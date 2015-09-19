@@ -71,7 +71,7 @@ function addTagForm(collectionHolder, $newLinkTr) {
     
     $newFormTbody=$('<tbody></tbody>'); 
     //met en place les td pour coller dans le tr
-    $newFormTr=$('<tr class="info"></tr>')
+    $newFormTr=$('<tr class="info"></tr>');
     $newFormTr.append(newForm);
     $newFormTbody.append($newFormTr);
     //Création de bouton delete et edit

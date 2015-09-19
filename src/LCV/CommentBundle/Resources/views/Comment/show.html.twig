@@ -24,7 +24,12 @@
 	   		{% set id = comment.id %}
 		    {% set form = forms[id] %}
 		    <div style="display: none" class="form_{{comment.id}}">
-			    <form action="{{ path('lcv_comment_view',{'article_id':article_id}) }}" method="post" {{ form_enctype(form) }}>
+		    	{% if form.vars.value.article != null %}
+			  	    <form action="{{ path('lcv_comment_view_article',{'article_id':article_id}) }}" method="post" {{ form_enctype(form) }}>
+			    {% elseif form.vars.value.playlist != null %}
+			    	<form action="{{ path('lcv_comment_view_playlist',{'playlist_id':playlist_id}) }}" method="post" {{ form_enctype(form) }}>
+			   	{% endif %}
+			    
 			    {{ form_start(form, {'attr': {'class': 'forms-horizontal'}}) }}
 			    {{ form_errors(form) }}
 			    

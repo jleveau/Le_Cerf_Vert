@@ -23,7 +23,7 @@ class EditPlaylistType extends AbstractType
           ->add('title',     'text',array(
                  'label'  => "Titre de la playlist"))
           ->add('category', 'entity', array(
-              'label'  => "Categorie",
+              'label'  => "Catégorie",
               'class'    => 'LCVPlaylistBundle:PlaylistCategory',
               'property' => 'name'))
           

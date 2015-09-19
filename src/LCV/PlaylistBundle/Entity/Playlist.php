@@ -74,9 +74,28 @@ class Playlist {
      * @ORM\ManyToOne(targetEntity="Application\Sonata\UserBundle\Entity\User", inversedBy="playlists" )
      */
     private $author;
-
+    
+     /**
+     * @ORM\OneToMany(targetEntity="LCV\CoreBundle\Entity\Notification", mappedBy="playlist", cascade={"remove"})
+     */
+    private $notifications;
+    
+     /**
+     * @ORM\OneToOne(targetEntity="LCV\CoreBundle\Entity\Rating", cascade={"persist","remove"})
+     */
+    private $rate;
+    
+     /**
+     * @ORM\OneToOne(targetEntity="LCV\CoreBundle\Entity\News", mappedBy="playlist", orphanRemoval=true)
+     **/
+    private $new;
+    
     /////
-
+    public function incViews(){
+        $this->views=$this->views+1;
+    }
+    
+    
     /**
      * @ORM\PreUpdate
      */
@@ -216,7 +235,7 @@ class Playlist {
      */
     public function addComment(\LCV\CommentBundle\Entity\Comment $comments) {
         $this -> comments[] = $comments;
-        $comments -> setPlaylist = $this;
+        $comments -> setPlaylist($this);
         return $this;
     }
 
@@ -294,5 +313,84 @@ class Playlist {
     public function getPlaylistAudios()
     {
         return $this->playlist_audios;
+    }
+
+    /**
+     * Add notifications
+     *
+     * @param \LCV\CoreBundle\Entity\Notification $notifications
+     * @return Playlist
+     */
+    public function addNotification(\LCV\CoreBundle\Entity\Notification $notifications)
+    {
+        $this->notifications[] = $notifications;
+
+        return $this;
+    }
+
+    /**
+     * Remove notifications
+     *
+     * @param \LCV\CoreBundle\Entity\Notification $notifications
+     */
+    public function removeNotification(\LCV\CoreBundle\Entity\Notification $notifications)
+    {
+        $this->notifications->removeElement($notifications);
+    }
+
+    /**
+     * Get notifications
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getNotifications()
+    {
+        return $this->notifications;
+    }
+
+    /**
+     * Set rate
+     *
+     * @param \LCV\CoreBundle\Entity\Rating $rate
+     * @return Playlist
+     */
+    public function setRate(\LCV\CoreBundle\Entity\Rating $rate = null)
+    {
+        $this->rate = $rate;
+
+        return $this;
+    }
+
+    /**
+     * Get rate
+     *
+     * @return \LCV\CoreBundle\Entity\Rating 
+     */
+    public function getRate()
+    {
+        return $this->rate;
+    }
+
+    /**
+     * Set new
+     *
+     * @param \LCV\CoreBundle\Entity\News $new
+     * @return Playlist
+     */
+    public function setNew(\LCV\CoreBundle\Entity\News $new = null)
+    {
+        $this->new = $new;
+
+        return $this;
+    }
+
+    /**
+     * Get new
+     *
+     * @return \LCV\CoreBundle\Entity\News 
+     */
+    public function getNew()
+    {
+        return $this->new;
     }
 }
