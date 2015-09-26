@@ -17,7 +17,6 @@ class UploadListener
     {
         $category_id = $event->getRequest()->get('category');
         $category=$this->em->getRepository('LCVPlaylistBundle:AudioCategory') -> findOneById($category_id);
-        dump($category);
         
         $Upfile=$event->getRequest()->files->get('files')[0];
         $name=$event->getFile()->getFileName();

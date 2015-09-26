@@ -1,0 +1,13 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host: 127.0.0.1
+    database_port: null
+    database_name: symfony
+    database_user: root
+    database_password: null
+    mailer_transport: gmail
+    mailer_host: null
+    mailer_user: oursgroumy@gmail.com
+    mailer_password: Expandable99
+    secret: d8ab3bc62f1acbfc1fa895205e308df184ae215e
+    audioRootDir: /Le_Cerf_Vert/web/uploads/audio/

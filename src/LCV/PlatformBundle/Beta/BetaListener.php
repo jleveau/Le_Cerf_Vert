@@ -25,15 +25,8 @@ class BetaListener {
             return;
         }
 
-        $remainingDays = $this -> endDate -> diff(new \Datetime()) -> format('%d');
-
-        // Si la date est dépassée, on ne fait rien
-        if ($remainingDays <= 0) {
-            return;
-        }
-
         // On utilise notre BetaHRML
-        $response = $this -> betaHTML -> displayBeta($event -> getResponse(), $remainingDays);
+        $response = $this -> betaHTML -> displayBeta($event -> getResponse());
         // On met à jour la réponse avec la nouvelle valeur
         $event -> setResponse($response);
     }

@@ -9,7 +9,6 @@ class ExtensionValidator extends ConstraintValidator {
     public $message = 'Le fichier "%string%" doit être un .mp3, .ogg, .wav';
 
     public function validate($value, Constraint $constraint) {
-        var_dump("in");
         if (!preg_match('/\.(ogg|mp3|wav)$/i', $value, $matches)) {
             $this -> context -> addViolation($constraint -> message, array('%string%' => $value));
         }

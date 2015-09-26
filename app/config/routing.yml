@@ -20,7 +20,7 @@ lcv_core:
 
 lcv_platform:
     resource: "@LCVPlatformBundle/Resources/config/routing.yml"
-    prefix:   /article
+    prefix:   /platform
     
 fos_user_security:
     resource: "@FOSUserBundle/Resources/config/routing/security.xml"

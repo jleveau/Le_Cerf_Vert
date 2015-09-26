@@ -21,7 +21,6 @@ class AudioFileRepository extends EntityRepository
                 
                 ->orderBy('pa.sortOrder','ASC')
                 ->getQuery();
-                dump($query->getResult());
                 return !empty($query->getResult());
         }
     

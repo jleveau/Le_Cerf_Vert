@@ -15,7 +15,6 @@ class MediaUrlExtension extends \Twig_Extension
     {
         $imageProvider = $this->get($image->getProvider());
         $url=$imageProvider->generatePublicUrl($image, $format);
-        dump($url);
         return " ";
     }
 

@@ -92,7 +92,7 @@ class ProfileFOSUser1Controller extends Controller
         if ($process) {
             $this->setFlash('sonata_user_success', 'profile.flash.updated');
 
-            return new RedirectResponse($this->generateUrl('sonata_user_profile_show'));
+            return new RedirectResponse($this->generateUrl('_accueil'));
         }
         return $this->render('SonataUserBundle:Profile:edit_profile.html.twig', array(
             'form'               => $form->createView(),

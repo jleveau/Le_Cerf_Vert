@@ -211,7 +211,6 @@ class AudioManagerController extends Controller
             
             $success=array();
             $errors=array();
-            dump($data);
             if ($audios != null){
                 foreach ($audios as $title => $audio){
                     if (!$audio_repo->isInPlaylist($audio)){
@@ -276,7 +275,6 @@ class AudioManagerController extends Controller
                         $zip->addFile("/Le_Cerf_Vert/web/uploads/audio/55fd66c039a66.mp3");
                        }
                     else{
-                        dump("c:\wamp\www\Le_Cerf_Vert/web/uploads/audio/55fd66c039a66.mp3"." file does not exist");
                     }
                 }
                 $zip->close();

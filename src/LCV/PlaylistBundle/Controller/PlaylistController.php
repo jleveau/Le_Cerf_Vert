@@ -149,9 +149,6 @@ class PlaylistController extends Controller {
         }
         if ($form -> handleRequest($request) -> isValid()) {
 
-            foreach ($playlist->getPlaylistAudios() as $playlistaudio) {
-                $playlistaudio -> getAudio() -> upload();
-            }
             $playlist -> updateDate();
             $em -> flush();
 

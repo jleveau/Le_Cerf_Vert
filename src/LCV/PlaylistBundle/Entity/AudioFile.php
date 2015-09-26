@@ -119,7 +119,7 @@ class AudioFile {
 
     public function getUploadRootDir() {
         // le chemin absolu du répertoire où les documents uploadés doivent être sauvegardés
-        return __DIR__ . '/../../../../web/uploads/audio/';
+        return __DIR__."/../../../../web/uploads/audio/";
     }
 
     public function getUploadDir() {
@@ -141,7 +141,7 @@ class AudioFile {
         $this->title=$this->file->getClientOriginalName();
         $this->defineExtension();
         // On enleve le / devant
-        $this -> uploadDir =  '/';
+        $this -> uploadDir =  '';
         $this -> name = sha1(uniqid(mt_rand(), true)) .'.'.$this->extension;
 
         // use the original file name here but you should

@@ -275,9 +275,7 @@ braincrafted_bootstrap:
     assets_dir: %kernel.root_dir%/../vendor/twbs/bootstrap
     jquery_path: %kernel.root_dir%/../vendor/jquery/jquery/jquery-1.11.1.js
     less_filter: less # "less", "lessphp", "sass" or "none"
-    fonts_dir: %kernel.root_dir%/../web/fonts
-
-
+    fonts_dir: %kernel.root_dir%/../web/fonts/
             
 oneup_uploader:
     mappings:
